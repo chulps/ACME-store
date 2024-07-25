@@ -1,0 +1,9 @@
+// .eslintrc.json
+{
+  "extends": ["next/core-web-vitals"],
+  "rules": {
+    "no-unused-vars": ["error", { "varsIgnorePattern": "^_", "argsIgnorePattern": "^_" }],
+    "semi": ["error", "always"],
+    "react/prop-types": "off"
+  }
+}
