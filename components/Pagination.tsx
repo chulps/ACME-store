@@ -9,9 +9,9 @@ const PaginationContainer = styled.div`
   grid-area: pagination;
 `;
 
-const PageButton = styled.button<{ active?: boolean }>`
-  background: ${({ active }) => (active ? 'var(--secondary)' : 'var(--dark)')};
-  color: ${({ active }) => (active ? 'var(--light)' : 'var(--neutral-300)')};
+const PageButton = styled.button<{ $active?: boolean }>`
+  background: ${({ $active }) => ($active ? 'var(--secondary)' : 'var(--dark)')};
+  color: ${({ $active }) => ($active ? 'var(--light)' : 'var(--neutral-300)')};
   padding: 0.5em 1em;
   border-radius: 0;
   font-size: var(--font-size-small);
@@ -45,7 +45,7 @@ interface PaginationProps {
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
   const renderPageButtons = () => {
     const pageButtons = [];
-    const maxButtons = 5; // Adjust this number for more/less page buttons
+    const maxButtons = 5;
 
     let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
     let endPage = Math.min(totalPages, startPage + maxButtons - 1);
@@ -69,8 +69,11 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
       pageButtons.push(
         <PageButton
           key={i}
-          onClick={() => onPageChange(i)}
-          active={i === currentPage}
+          onClick={() => {
+            console.log(`Page ${i} clicked`);
+            onPageChange(i);
+          }}
+          $active={i === currentPage}
         >
           {i}
         </PageButton>
@@ -94,14 +97,20 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
   return (
     <PaginationContainer>
       <PageButton
-        onClick={() => onPageChange(currentPage - 1)}
+        onClick={() => {
+          console.log('Previous clicked');
+          onPageChange(currentPage - 1);
+        }}
         disabled={currentPage === 1}
       >
         Previous
       </PageButton>
       {renderPageButtons()}
       <PageButton
-        onClick={() => onPageChange(currentPage + 1)}
+        onClick={() => {
+          console.log('Next clicked');
+          onPageChange(currentPage + 1);
+        }}
         disabled={currentPage === totalPages}
       >
         Next

@@ -74,23 +74,23 @@ const addButtonAnimation = keyframes`
   }
 `;
 
-const Button = styled.button<{ added: boolean }>`
+const Button = styled.button<{ $added: boolean }>`
   margin-top: 1rem;
   width: fit-content;
   align-self: flex-end;
   justify-self: flex-end;
-  background-color: ${({ added }) => (added ? "var(--success)" : "var(--primary)")};
+  background-color: ${({ $added }) => ($added ? "var(--success)" : "var(--primary)")};
   color: white;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: var(--space-1);
-  animation: ${({ added }) => added && addButtonAnimation} 0.3s ease-in-out forwards;
-  pointer-events: ${({ added }) => (added ? 'none' : 'auto')}; // Disable pointer events when added
+  animation: ${({ $added }) => $added && addButtonAnimation} 0.3s ease-in-out forwards;
+  pointer-events: ${({ $added }) => ($added ? 'none' : 'auto')}; // Disable pointer events when added
 
   &:hover {
-    background-color: ${({ added }) => (added ? "var(--success-dark)" : "var(--primary-dark)")};
+    background-color: ${({ $added }) => ($added ? "var(--success-dark)" : "var(--primary-dark)")};
   }
 `;
 
@@ -136,7 +136,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               {convertedPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
             </Price>
           </PriceContainer>
-          <Button added={added} onClick={handleAddToCart}>
+          <Button $added={added} onClick={handleAddToCart}>
             <FontAwesomeIcon icon={added ? faCheck : faCartPlus} />
             &nbsp;{added ? "Added to cart" : "Add to cart"}
           </Button>
@@ -147,4 +147,3 @@ const ProductCard: React.FC<ProductCardProps> = ({
 };
 
 export default ProductCard;
-

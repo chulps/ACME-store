@@ -1,11 +1,10 @@
 // components/Search.tsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import { Currency } from "../common/types";
 import CurrencySelector from "./CurrencySelector";
-import useDebounce from '../hooks/useDebounce'; // Import debounce hook
 
 const SearchContainer = styled.header`
   margin: 0 var(--space-2);
@@ -85,11 +84,25 @@ const Search: React.FC<SearchProps> = ({
   currentCurrency,
 }) => {
   const [query, setQuery] = useState("");
-  const debouncedQuery = useDebounce(query, 500); // Debounce with 500ms delay
+
+  const debouncedSearch = useCallback(
+    (query) => {
+      const handler = setTimeout(() => {
+        console.log("Search query from useEffect:", query);
+        onSearch(query);
+      }, 1000);
+
+      return () => {
+        clearTimeout(handler);
+      };
+    },
+    [onSearch]
+  );
 
   useEffect(() => {
-    onSearch(debouncedQuery);
-  }, [debouncedQuery, onSearch]);
+    console.log("Search useEffect triggered with query:", query);
+    return debouncedSearch(query);
+  }, [query, debouncedSearch]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);

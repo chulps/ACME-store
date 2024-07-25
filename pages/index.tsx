@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Head from "next/head";
 import styled from "styled-components";
 import axios from "axios";
@@ -60,6 +60,11 @@ const Home = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
+        console.log("Fetching items with", {
+          limit: itemsPerPage,
+          offset: (currentPage - 1) * itemsPerPage,
+          query: searchQuery,
+        });
         const response = await axios.get("/api/items", {
           params: {
             limit: itemsPerPage,
@@ -67,6 +72,7 @@ const Home = () => {
             query: searchQuery,
           },
         });
+        console.log("Items fetched:", response.data.items);
         setFilteredItems(response.data.items);
         setTotalItems(response.data.total);
         setItemsPerPage(response.data.perPage);
@@ -78,21 +84,24 @@ const Home = () => {
     fetchItems();
   }, [searchQuery, currentPage, itemsPerPage]);
 
-  const handleSearch = (query: string) => {
+  const handleSearch = useCallback((query: string) => {
     setSearchQuery(query);
-    setCurrentPage(1);
-  };
+    setCurrentPage(1); // Reset to first page on new search
+  }, []);
 
   const handleAddToCart = (item: Product) => {
     setCartItems([...cartItems, item]);
+    console.log("Item added to cart:", item);
   };
 
   const handleRemoveFromCart = (id: string) => {
     setCartItems(cartItems.filter((item) => item.id !== id));
+    console.log("Item removed from cart:", id);
   };
 
   const handleCurrencyChange = (currency: string) => {
     setCurrency(currency);
+    console.log("Currency changed:", currency);
   };
 
   const convertPrice = (price: number, currency: string) => {
@@ -108,12 +117,14 @@ const Home = () => {
 
   const toggleCartVisibility = () => {
     setIsCartVisible(!isCartVisible);
+    console.log("Cart visibility toggled:", !isCartVisible);
   };
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+    console.log("Current page updated:", page);
   };
 
   return (
@@ -157,7 +168,7 @@ const Home = () => {
         currentCurrency={currency}
         convertPrice={convertPrice}
       />
-      <style jsx>{`
+      <style>{`
         .search-component-mobile {
           display: flex;
         }
