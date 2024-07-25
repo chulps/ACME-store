@@ -26,7 +26,6 @@ const PageContainer = styled.div`
     grid-template-columns: 1fr 3fr auto;
     grid-template-areas:
       "header header cart"
-      "search search cart"
       "productlist productlist cart"
       "pagination pagination cart";
   }
@@ -124,13 +123,22 @@ const Home = () => {
       <Head>
         <title>Acme Store</title>
       </Head>
-      <Header toggleCartVisibility={toggleCartVisibility} cartItemCount={cartItems.length} />
-      <Search
-        onSearch={handleSearch}
+      <Header
+        toggleCartVisibility={toggleCartVisibility}
+        cartItemCount={cartItems.length}
         currencies={currencies}
         onCurrencyChange={handleCurrencyChange}
         currentCurrency={currency}
+        onSearch={handleSearch}
       />
+      <div className="search-component-mobile">
+        <Search
+          onSearch={handleSearch}
+          currencies={currencies}
+          onCurrencyChange={handleCurrencyChange}
+          currentCurrency={currency}
+        />
+      </div>
       <ProductList
         products={filteredItems}
         onAddToCart={handleAddToCart}
@@ -151,6 +159,16 @@ const Home = () => {
         currentCurrency={currency}
         convertPrice={convertPrice}
       />
+      <style jsx>{`
+        .search-component-mobile {
+          display: flex;
+        }
+        @media (min-width: 992px) {
+          .search-component-mobile {
+            display: none;
+          }
+        }
+      `}</style>
     </PageContainer>
   );
 };

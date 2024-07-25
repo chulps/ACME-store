@@ -1,7 +1,9 @@
-import styled from 'styled-components';
-import Image from 'next/image';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
+import styled from "styled-components";
+import Image from "next/image";
+import Search from "./Search";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { Currency } from "../common/types";
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -9,6 +11,11 @@ const HeaderContainer = styled.header`
   align-items: center;
   padding: var(--space-2);
   grid-area: header;
+  
+  @media screen and (min-width: 992px) {
+    flex-direction: row;
+    border-bottom: 1px solid var(--secondary);
+  }
 `;
 
 const Title = styled.h1`
@@ -71,23 +78,57 @@ const CartButtonContainer = styled.div`
   align-items: flex-end;
 `;
 
+const Middle = styled.div`
+  display: none;
+
+  @media screen and (min-width: 992px) {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+  }
+`;
+
 interface HeaderProps {
   toggleCartVisibility: () => void;
   cartItemCount: number;
+  currencies: Currency[];
+  onCurrencyChange: (_currency: string) => void;
+  currentCurrency: string;
+  onSearch: (_query: string) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ toggleCartVisibility, cartItemCount }) => {
+const Header: React.FC<HeaderProps> = ({
+  toggleCartVisibility,
+  cartItemCount,
+  currencies,
+  onCurrencyChange,
+  currentCurrency,
+  onSearch,
+}) => {
   return (
     <HeaderContainer>
       <Title>
-        <h4 style={{ background: 'var(--danger)', padding: '0.25em' }}>ACME</h4>
+        <h4 style={{ background: "var(--danger)", padding: "0.25em" }}>ACME</h4>
       </Title>
+      <Middle>
+        <Search
+          onSearch={onSearch}
+          currencies={currencies}
+          onCurrencyChange={onCurrencyChange}
+          currentCurrency={currentCurrency}
+        />
+      </Middle>
       <IconsContainer>
         <UserIcon>
           <Image src="/user-icon.png" alt="User" width={40} height={40} />
         </UserIcon>
         <CartButtonContainer>
-          <Cart icon={faCartShopping} size="2x" onClick={toggleCartVisibility} />
+          <Cart
+            icon={faCartShopping}
+            size="2x"
+            onClick={toggleCartVisibility}
+          />
           {cartItemCount > 0 && <Badge>{cartItemCount}</Badge>}
         </CartButtonContainer>
       </IconsContainer>

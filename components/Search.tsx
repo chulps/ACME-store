@@ -13,14 +13,20 @@ import CurrencySelector from "./CurrencySelector";
 const SearchContainer = styled.header`
   margin: 0 var(--space-2);
   gap: var(--space-2);
-  border-bottom: 1px solid var(--secondary);
   grid-area: search;
   display: flex;
-  padding-bottom: var(--space-2);
   justify-content: space-between;
-
+  flex-grow: 1;
+  border-bottom: 1px solid var(--secondary);
+  padding-bottom: var(--space-2);
+  
   @media (min-width: 576px) {
     flex-direction: row-reverse;
+    }
+    
+    @media (min-width: 992px) {
+        padding-bottom: 0;
+    border: none;
   }
 `;
 
@@ -29,7 +35,8 @@ const SearchInputContainer = styled.div`
   align-items: center;
   gap: var(--space-2);
   justify-content: space-between;
-  
+  flex-grow: 1;
+  max-width: var(--space-6);
 `;
 
 const SearchIcon = styled(FontAwesomeIcon)`
