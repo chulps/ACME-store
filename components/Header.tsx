@@ -24,9 +24,11 @@ const Title = styled.h4`
   display: flex;
   align-items: center;
   font-weight: normal;
-  background: red;
+  background: var(--danger);
+  box-shadow: 0 0 var(--space-1) var(--danger);
   padding: 1rem;
   font-weight: bold;
+  color: var(--white);
 `;
 
 const IconsContainer = styled.div`
@@ -117,10 +119,13 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   return (
     <HeaderContainer>
-      <Title>
-
-       ACME™
-      </Title>
+      
+      <span style={{display: "flex", color: "var(--danger)"}}>
+        <Title>
+         ACME
+        </Title>
+        &nbsp;™
+      </span>
       <Middle>
         <Search
           onSearch={onSearch}

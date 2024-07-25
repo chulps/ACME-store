@@ -2,7 +2,8 @@
 import styled from "styled-components";
 import { CartItem as CartItemType } from "../common/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faDollarSign, faEuroSign, faYenSign, faPoundSign } from "@fortawesome/free-solid-svg-icons";
+import { faCanadianMapleLeaf } from "@fortawesome/free-brands-svg-icons";
 
 const ItemContainer = styled.li`
   display: flex;
@@ -71,6 +72,14 @@ interface CartItemProps {
   currency: string; // Add currency prop
 }
 
+const currencyIcons = {
+  usd: faDollarSign,
+  eur: faEuroSign,
+  jpy: faYenSign,
+  gbp: faPoundSign,
+  cad: faCanadianMapleLeaf,
+};
+
 const CartItem: React.FC<CartItemProps> = ({ item, onRemove, convertPrice, currency }) => {
   return (
     <ItemContainer>
@@ -86,8 +95,10 @@ const CartItem: React.FC<CartItemProps> = ({ item, onRemove, convertPrice, curre
           <ItemDescription>{item.description}</ItemDescription>
         </div>
         <ItemPrice>
-          <label>{currency}</label>
-          {convertPrice(item.price, currency).toFixed(2)}
+          <label>
+            <FontAwesomeIcon icon={currencyIcons[currency as keyof typeof currencyIcons]} /> {currency.toUpperCase()}
+          </label>
+          {convertPrice(item.price, currency).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
         </ItemPrice>
       </ItemDetails>
     </ItemContainer>

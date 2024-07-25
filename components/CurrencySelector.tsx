@@ -1,8 +1,9 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Currency } from '../common/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faDollarSign, faEuroSign, faYenSign, faPoundSign } from '@fortawesome/free-solid-svg-icons';
+import { faCanadianMapleLeaf } from '@fortawesome/free-brands-svg-icons';
 
 const SelectorContainer = styled.div`
   display: flex;
@@ -74,8 +75,17 @@ export interface CurrencySelectorProps {
   currentCurrency: string;
 }
 
+const currencyIcons = {
+  usd: faDollarSign,
+  eur: faEuroSign,
+  jpy: faYenSign,
+  gbp: faPoundSign,
+  cad: faCanadianMapleLeaf,
+};
+
 const CurrencySelector: React.FC<CurrencySelectorProps> = ({ currencies, onCurrencyChange, currentCurrency }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -86,11 +96,27 @@ const CurrencySelector: React.FC<CurrencySelectorProps> = ({ currencies, onCurre
     setIsOpen(false);
   };
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <SelectorContainer>
+    <SelectorContainer ref={containerRef}>
       <DropdownButton onClick={toggleDropdown}>
         <label>Currency</label>
-        <Text>{currentCurrency.toUpperCase()} <ChevronIcon icon={faChevronDown} /></Text>
+        <Text>
+          <FontAwesomeIcon icon={currencyIcons[currentCurrency as keyof typeof currencyIcons]} /> {currentCurrency.toUpperCase()}
+          <ChevronIcon icon={faChevronDown} />
+        </Text>
       </DropdownButton>
       {isOpen && (
         <DropdownMenu>
@@ -98,7 +124,7 @@ const CurrencySelector: React.FC<CurrencySelectorProps> = ({ currencies, onCurre
             .filter(currency => currency.key !== currentCurrency)
             .map(currency => (
               <DropdownMenuItem key={currency.key} onClick={() => handleCurrencyChange(currency.key)}>
-                {currency.symbol} - {currency.key.toUpperCase()}
+                <FontAwesomeIcon icon={currencyIcons[currency.key as keyof typeof currencyIcons]} /> {currency.key.toUpperCase()}
               </DropdownMenuItem>
             ))}
         </DropdownMenu>

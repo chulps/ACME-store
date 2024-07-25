@@ -1,7 +1,8 @@
 import styled, { keyframes } from "styled-components";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartPlus, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCartPlus, faCheck, faDollarSign, faEuroSign, faYenSign, faPoundSign } from "@fortawesome/free-solid-svg-icons";
+import { faCanadianMapleLeaf } from "@fortawesome/free-brands-svg-icons";
 
 const Card = styled.div`
   display: flex;
@@ -62,14 +63,18 @@ const addButtonAnimation = keyframes`
   0% {
     background-color: var(--primary);
     color: white;
+    box-shadow: 0 0 0 transparent;
   }
   50% {
     background-color: var(--success);
     color: white;
+    box-shadow: 0 0 var(--space-1) var(--success-600);
+
   }
   100% {
     background-color: var(--background-color);
     color: var(--success);
+    box-shadow: 0 0 0 transparent;
   }
 `;
 
@@ -86,11 +91,11 @@ const Button = styled.button<{ $added: boolean }>`
   align-items: center;
   padding: 1em;
   gap: var(--space-1);
-  animation: ${({ $added }) => $added && addButtonAnimation} 0.3s ease-in-out forwards;
+  animation: ${({ $added }) => $added && addButtonAnimation} 1s ease-in-out forwards;
   pointer-events: ${({ $added }) => ($added ? 'none' : 'auto')}; // Disable pointer events when added
 
   &:hover {
-    background-color: ${({ $added }) => ($added ? "var(--success-dark)" : "var(--primary-dark)")};
+    background-color: ${({ $added }) => ($added ? "var(--success-dark)" : "var(--royal-400)")};
   }
 `;
 
@@ -105,6 +110,14 @@ interface ProductCardProps {
   convertPrice: (_price: number, _currency: string) => number;
   currency: string;
 }
+
+const currencyIcons = {
+  usd: faDollarSign,
+  eur: faEuroSign,
+  jpy: faYenSign,
+  gbp: faPoundSign,
+  cad: faCanadianMapleLeaf,
+};
 
 const ProductCard: React.FC<ProductCardProps> = ({
   title,
@@ -137,14 +150,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <Description>{description}</Description>
         <BottomRow>
           <PriceContainer>
-            <label>{currency.toUpperCase()}</label>
+            <label>
+              <FontAwesomeIcon icon={currencyIcons[currency as keyof typeof currencyIcons]} /> {currency.toUpperCase()}
+            </label>
             <Price>
-              {convertedPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+              {convertedPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </Price>
           </PriceContainer>
           <Button $added={added} onClick={handleAddToCart}>
             <FontAwesomeIcon icon={added ? faCheck : faCartPlus} />
-            &nbsp;{added ? "Added to cart" : "Add to cart"}
+             {added ? "Added to cart" : "Add to cart"}
           </Button>
         </BottomRow>
       </Content>

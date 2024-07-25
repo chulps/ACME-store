@@ -5,7 +5,7 @@ const PaginationContainer = styled.div`
   justify-content: center;
   border-top: 1px solid var(--secondary);
   padding-top: var(--space-2);
-  margin: 2rem 0;
+  margin: 0 var(--space-2) var(--space-2) var(--space-2);
   grid-area: pagination;
 `;
 

@@ -3,7 +3,8 @@ import styled from "styled-components";
 import CartItem from "./CartItem";
 import { CartItem as CartItemType } from "../common/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faCartShopping, faTimes, faDollarSign, faEuroSign, faYenSign, faPoundSign } from "@fortawesome/free-solid-svg-icons";
+import { faCanadianMapleLeaf } from "@fortawesome/free-brands-svg-icons";
 
 interface CartContainerProps {
   $isVisible: boolean;
@@ -121,6 +122,14 @@ interface CartProps {
   convertPrice: (_price: number, _currency: string) => number;
 }
 
+const currencyIcons = {
+  usd: faDollarSign,
+  eur: faEuroSign,
+  jpy: faYenSign,
+  gbp: faPoundSign,
+  cad: faCanadianMapleLeaf,
+};
+
 const Cart: React.FC<CartProps> = ({
   items,
   onRemove,
@@ -135,7 +144,7 @@ const Cart: React.FC<CartProps> = ({
       <CartHeader>
         <CartTitle>
           <FontAwesomeIcon icon={faCartShopping} />
-          &nbsp;{items.length} Items
+          &nbsp;{items.length} Item{items.length === 1 ? "" : "s"}
         </CartTitle>
 
         <CloseButton onClick={onClose}>
@@ -161,7 +170,9 @@ const Cart: React.FC<CartProps> = ({
       )}
       <TotalPriceContainer>
         <TotalPriceLeftContent>
-          <label>Total ({currentCurrency.toUpperCase()}):</label>
+          <label>
+            <FontAwesomeIcon icon={currencyIcons[currentCurrency as keyof typeof currencyIcons]} /> {currentCurrency.toUpperCase()}
+          </label>
           <TotalPrice>{totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</TotalPrice>
         </TotalPriceLeftContent>
         <CheckoutButton disabled={items.length === 0}>Checkout</CheckoutButton>
