@@ -1,4 +1,3 @@
-// components/Pagination.tsx
 import styled from 'styled-components';
 
 const PaginationContainer = styled.div`
@@ -7,12 +6,12 @@ const PaginationContainer = styled.div`
   border-top: 1px solid var(--secondary);
   padding-top: var(--space-2);
   margin: 2rem 0;
-    grid-area: pagination;
-
+  grid-area: pagination;
 `;
 
-const PageButton = styled.button`
-  background: var(--dark);
+const PageButton = styled.button<{ active?: boolean }>`
+  background: ${({ active }) => (active ? 'var(--secondary)' : 'var(--dark)')};
+  color: ${({ active }) => (active ? 'var(--light)' : 'var(--neutral-300)')};
   padding: 0.5em 1em;
   border-radius: 0;
   font-size: var(--font-size-small);
@@ -26,6 +25,12 @@ const PageButton = styled.button`
   }
 `;
 
+const Ellipsis = styled.span`
+  padding: 0.5em 1em;
+  font-size: var(--font-size-small);
+  color: var(--neutral-300);
+`;
+
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
@@ -33,17 +38,67 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
+  const renderPageButtons = () => {
+    const pageButtons = [];
+    const maxButtons = 5; // Adjust this number for more/less page buttons
+
+    let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+    let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+
+    if (endPage - startPage < maxButtons - 1) {
+      startPage = Math.max(1, endPage - maxButtons + 1);
+    }
+
+    if (startPage > 1) {
+      pageButtons.push(
+        <PageButton key={1} onClick={() => onPageChange(1)}>
+          1
+        </PageButton>
+      );
+      if (startPage > 2) {
+        pageButtons.push(<Ellipsis key="start-ellipsis">...</Ellipsis>);
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageButtons.push(
+        <PageButton
+          key={i}
+          onClick={() => onPageChange(i)}
+          active={i === currentPage}
+        >
+          {i}
+        </PageButton>
+      );
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pageButtons.push(<Ellipsis key="end-ellipsis">...</Ellipsis>);
+      }
+      pageButtons.push(
+        <PageButton key={totalPages} onClick={() => onPageChange(totalPages)}>
+          {totalPages}
+        </PageButton>
+      );
+    }
+
+    return pageButtons;
+  };
+
   return (
     <PaginationContainer>
-      <PageButton onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
+      <PageButton
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+      >
         Previous
       </PageButton>
-      {Array.from({ length: totalPages }, (_, index) => (
-        <PageButton key={index} onClick={() => onPageChange(index + 1)}>
-          {index + 1}
-        </PageButton>
-      ))}
-      <PageButton onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+      {renderPageButtons()}
+      <PageButton
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+      >
         Next
       </PageButton>
     </PaginationContainer>

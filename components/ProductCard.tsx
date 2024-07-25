@@ -6,6 +6,11 @@ import { faCartPlus, faCheck } from "@fortawesome/free-solid-svg-icons";
 const Card = styled.div`
   display: flex;
   flex-direction: column;
+  transition: transform 0.2s ease-out;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 `;
 
 const Image = styled.img`
@@ -90,7 +95,7 @@ const Button = styled.button<{ added: boolean }>`
   pointer-events: ${({ added }) => (added ? 'none' : 'auto')}; // Disable pointer events when added
 
   &:hover {
-    background-color: ${({ added }) => (added ? "var(--success-dark)" : "var(--primary-dark)")};
+    background-color: ${({ added }) => (added ? "var(--success-950)" : "var(--primary-dark)")};
   }
 `;
 

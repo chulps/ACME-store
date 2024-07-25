@@ -22,7 +22,7 @@ const PageContainer = styled.div`
     "pagination";
 
   @media screen and (min-width: 992px) {
-    grid-template-rows: 100px fit-content auto fit-content fit-content;
+    grid-template-rows: auto auto auto fit-content fit-content;
     grid-template-columns: 1fr 3fr auto;
     grid-template-areas:
       "header header cart"
@@ -40,7 +40,7 @@ const Home = () => {
   const [isCartVisible, setIsCartVisible] = useState(false); // Add state variable for cart visibility
 
   const [currentPage, setCurrentPage] = useState(1); // Current page state
-  const itemsPerPage = 15; // Items per page
+  const [itemsPerPage, setItemsPerPage] = useState(9); // Items per page (default)
 
   const [currencies, setCurrencies] = useState<Currency[]>([]);
   const [totalItems, setTotalItems] = useState(0);
@@ -72,6 +72,7 @@ const Home = () => {
         });
         setFilteredItems(response.data.items);
         setTotalItems(response.data.total);
+        setItemsPerPage(response.data.perPage); // Dynamically set items per page
       } catch (error) {
         console.error("Error fetching items:", error);
       }
