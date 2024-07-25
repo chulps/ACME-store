@@ -151,6 +151,7 @@ const Home = () => {
       <ProductList
         products={filteredItems}
         onAddToCart={handleAddToCart}
+        cartItems={cartItems} // Pass cart items to ProductList
         convertPrice={convertPrice}
         currency={currency}
       />

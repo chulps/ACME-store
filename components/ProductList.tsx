@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import ProductCard from "./ProductCard";
-import { Product } from "../common/types";
+import { Product, CartItem } from "../common/types";
 
 const ProductListMain = styled.main`
   display: flex;
@@ -25,6 +25,7 @@ const ListGrid = styled.div`
 interface ProductListProps {
   products: Product[];
   onAddToCart: (_product: Product) => void;
+  cartItems: CartItem[];
   convertPrice: (_price: number, _currency: string) => number;
   currency: string;
 }
@@ -32,25 +33,30 @@ interface ProductListProps {
 const ProductList: React.FC<ProductListProps> = ({
   products,
   onAddToCart,
+  cartItems,
   convertPrice,
   currency,
 }) => {
   return (
     <ProductListMain>
       <ListGrid>
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            title={product.title}
-            priceCurrency={product.priceCurrency}
-            price={product.price}
-            imageSrc={product.imageSrc}
-            description={product.description}
-            onAddToCart={() => onAddToCart(product)}
-            convertPrice={convertPrice}
-            currency={currency}
-          />
-        ))}
+        {products.map((product) => {
+          const isInCart = cartItems.some((item) => item.id === product.id);
+          return (
+            <ProductCard
+              key={product.id}
+              title={product.title}
+              priceCurrency={product.priceCurrency}
+              price={product.price}
+              imageSrc={product.imageSrc}
+              description={product.description}
+              onAddToCart={() => onAddToCart(product)}
+              isInCart={isInCart} // Pass isInCart to ProductCard
+              convertPrice={convertPrice}
+              currency={currency}
+            />
+          );
+        })}
       </ListGrid>
     </ProductListMain>
   );

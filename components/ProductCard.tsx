@@ -1,6 +1,5 @@
-// components/ProductCard.tsx
 import styled, { keyframes } from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartPlus, faCheck } from "@fortawesome/free-solid-svg-icons";
 
@@ -85,6 +84,7 @@ const Button = styled.button<{ $added: boolean }>`
   cursor: pointer;
   display: flex;
   align-items: center;
+  padding: 1em;
   gap: var(--space-1);
   animation: ${({ $added }) => $added && addButtonAnimation} 0.3s ease-in-out forwards;
   pointer-events: ${({ $added }) => ($added ? 'none' : 'auto')}; // Disable pointer events when added
@@ -101,6 +101,7 @@ interface ProductCardProps {
   description: string;
   priceCurrency: string;
   onAddToCart: () => void;
+  isInCart: boolean; // Add isInCart prop
   convertPrice: (_price: number, _currency: string) => number;
   currency: string;
 }
@@ -111,10 +112,15 @@ const ProductCard: React.FC<ProductCardProps> = ({
   imageSrc,
   description,
   onAddToCart,
+  isInCart,
   convertPrice,
   currency,
 }) => {
-  const [added, setAdded] = useState(false);
+  const [added, setAdded] = useState(isInCart);
+
+  useEffect(() => {
+    setAdded(isInCart);
+  }, [isInCart]);
 
   const handleAddToCart = () => {
     onAddToCart();
