@@ -9,7 +9,7 @@ const Card = styled.div`
   transition: transform 0.2s ease-out;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.01);
   }
 `;
 
@@ -95,7 +95,7 @@ const Button = styled.button<{ added: boolean }>`
   pointer-events: ${({ added }) => (added ? 'none' : 'auto')}; // Disable pointer events when added
 
   &:hover {
-    background-color: ${({ added }) => (added ? "var(--success-950)" : "var(--primary-dark)")};
+    background-color: ${({ added }) => (added ? "var(--success)" : "var(--dark)")};
   }
 `;
 

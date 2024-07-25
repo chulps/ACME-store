@@ -72,6 +72,10 @@ const CloseButton = styled.button`
   font-size: 1.2rem;
   color: var(--text-color);
   padding: 1em;
+
+  &:hover {
+    background: var(--dark);
+  }
 `;
 
 const CartItemList = styled.ul`

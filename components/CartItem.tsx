@@ -53,6 +53,11 @@ const RemoveButton = styled.button`
   border-radius: 0.5em;
   align-self: flex-start;
   justify-self: flex-end;
+
+  &:hover {
+    background: var(--danger-900);
+    color: var(--danger-500);
+  }
 `;
 
 const ItemDescription = styled.small`
