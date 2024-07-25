@@ -28,6 +28,7 @@ const ItemImage = styled.img`
   font-size: var(--font-size-small);
   height: auto;
   margin-right: 1rem;
+  align-self: flex-start;
 `;
 
 const ItemTitle = styled.p`
@@ -40,6 +41,7 @@ const ItemTitle = styled.p`
 
 const ItemPrice = styled.data`
   font-size: var(--font-size-h4);
+  text-align: right;
 `;
 
 const RemoveButton = styled.button`
@@ -67,13 +69,15 @@ const CartItem: React.FC<CartItemProps> = ({ item, onRemove }) => {
     <ItemContainer>
       <ItemImage src={item.imageSrc} alt={item.title} />
       <ItemDetails>
-        <ItemTitle>
-          {item.title}
-          <RemoveButton onClick={() => onRemove(item.id)}>
-            <FontAwesomeIcon icon={faTrash} />
-          </RemoveButton>
-        </ItemTitle>
-        <ItemDescription>{item.description}</ItemDescription>
+        <div>
+          <ItemTitle>
+            {item.title}
+            <RemoveButton onClick={() => onRemove(item.id)}>
+              <FontAwesomeIcon icon={faTrash} />
+            </RemoveButton>
+          </ItemTitle>
+          <ItemDescription>{item.description}</ItemDescription>
+        </div>
         <ItemPrice>
           <label>{item.priceCurrency}</label>
           {item.price}

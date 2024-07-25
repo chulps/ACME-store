@@ -4,6 +4,8 @@ import styled from 'styled-components';
 const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;
+  border-top: 1px solid var(--secondary);
+  padding-top: var(--space-2);
   margin: 2rem 0;
     grid-area: pagination;
 

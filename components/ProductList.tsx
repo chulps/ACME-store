@@ -14,7 +14,7 @@ const ProductListMain = styled.main`
 
 const ListGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(calc(var(--space-5) + var(--space-4)), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(var(--space-6), 1fr));
   gap: var(--space-4);
   height: 100%;
   overflow-y: auto;

@@ -17,8 +17,9 @@ const SearchContainer = styled.header`
   grid-area: search;
   display: flex;
   padding-bottom: var(--space-2);
+  justify-content: space-between;
 
-  @media (min-width: 992px) {
+  @media (min-width: 576px) {
     flex-direction: row-reverse;
   }
 `;
@@ -60,7 +61,6 @@ const CurrencySelectorContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-grow: 1;
 `;
 
 interface SearchProps {

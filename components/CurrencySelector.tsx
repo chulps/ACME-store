@@ -15,12 +15,12 @@ const DropdownButton = styled.button`
   display: flex;
   flex-direction: column;
   background: var(--background-color);
-  border: 1px solid var(--dark);
+  border: 1px solid var(--secondary);
   width: fit-content;
   cursor: pointer;
   gap: 0;
   align-items: flex-end;
-    z-index: 1;
+    z-index: 2;
 
     &:hover {
         background: var(--background-color);
@@ -35,7 +35,7 @@ const DropdownButton = styled.button`
 const DropdownMenu = styled.ul`
   position: absolute;
   top: 100%;
-  background: var(--background-color);
+  background: var(--dark);
   border: 1px solid var(--secondary);
   overflow-y: auto;
   z-index: 1;

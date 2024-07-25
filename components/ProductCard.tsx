@@ -13,6 +13,7 @@ const Image = styled.img`
   height: auto;
   background: var(--dark);
   aspect-ratio: 16/9;
+  border-radius: var(--space-1);
 `;
 
 const Content = styled.div`
@@ -32,20 +33,19 @@ const Description = styled.p`
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  min-height: calc(var(--font-size-h3) * 3);
-  position: relative;
-  display: block;
   color: var(--neutral-300);
+  min-height: 4.5em; // Ensure description has a minimum height
+  margin-bottom: var(--space-1);
+  height: 3em;
 `;
 
 const BottomRow = styled.div`
   display: flex;
-  flex-grow: 1;
   justify-content: space-between;
   align-items: flex-end;
   border-top: 1px solid var(--dark);
   padding: var(--space-1) 0;
-  margin-top: var(--space-1);
+  margin-top: 1em;
 `;
 
 const Price = styled.data`

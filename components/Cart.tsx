@@ -25,7 +25,7 @@ const CartContainer = styled.div.attrs<CartContainerProps>((props) => ({
   top: 0;
   left: 0;
   background: var(--background-color);
-  z-index: 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
