@@ -23,6 +23,11 @@ const PageButton = styled.button<{ active?: boolean }>`
   &:last-of-type {
     border-radius: 0 1em 1em 0;
   }
+
+  &:hover {
+    background: var(--dark);
+    filter: brightness(1.2);
+  }
 `;
 
 const Ellipsis = styled.span`

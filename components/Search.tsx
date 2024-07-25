@@ -1,14 +1,11 @@
-//libs
+// components/Search.tsx
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-
-// types
 import { Currency } from "../common/types";
-
-// components
 import CurrencySelector from "./CurrencySelector";
+import useDebounce from '../hooks/useDebounce'; // Import debounce hook
 
 const SearchContainer = styled.header`
   margin: 0 var(--space-2);
@@ -19,13 +16,13 @@ const SearchContainer = styled.header`
   flex-grow: 1;
   border-bottom: 1px solid var(--secondary);
   padding-bottom: var(--space-2);
-  
+
   @media (min-width: 576px) {
     flex-direction: row-reverse;
-    }
-    
-    @media (min-width: 992px) {
-        padding-bottom: 0;
+  }
+
+  @media (min-width: 992px) {
+    padding-bottom: 0;
     border: none;
   }
 `;
@@ -36,7 +33,11 @@ const SearchInputContainer = styled.div`
   gap: var(--space-2);
   justify-content: space-between;
   flex-grow: 1;
-  max-width: var(--space-6);
+  max-width: var(--space-7);
+
+  @media (min-width: 992px) {
+    max-width: var(--space-6);
+  }
 `;
 
 const SearchIcon = styled(FontAwesomeIcon)`
@@ -84,16 +85,11 @@ const Search: React.FC<SearchProps> = ({
   currentCurrency,
 }) => {
   const [query, setQuery] = useState("");
+  const debouncedQuery = useDebounce(query, 500); // Debounce with 500ms delay
 
   useEffect(() => {
-    const handler = setTimeout(() => {
-      onSearch(query);
-    }, 1000);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [query, onSearch]);
+    onSearch(debouncedQuery);
+  }, [debouncedQuery, onSearch]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -101,9 +97,7 @@ const Search: React.FC<SearchProps> = ({
 
   return (
     <SearchContainer>
-
       <SearchInputContainer>
-
         <SearchInput
           id="search-input"
           type="text"
@@ -112,16 +106,14 @@ const Search: React.FC<SearchProps> = ({
           placeholder="Search products..."
         />
         <SearchIcon icon={faSearch} />
-
-
       </SearchInputContainer>
-        <CurrencySelectorContainer>
-          <CurrencySelector
-            currencies={currencies}
-            onCurrencyChange={onCurrencyChange}
-            currentCurrency={currentCurrency}
-          />
-        </CurrencySelectorContainer>
+      <CurrencySelectorContainer>
+        <CurrencySelector
+          currencies={currencies}
+          onCurrencyChange={onCurrencyChange}
+          currentCurrency={currentCurrency}
+        />
+      </CurrencySelectorContainer>
     </SearchContainer>
   );
 };

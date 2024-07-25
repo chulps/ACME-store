@@ -1,3 +1,4 @@
+// components/Header.tsx
 import styled from "styled-components";
 import Image from "next/image";
 import Search from "./Search";
@@ -18,12 +19,14 @@ const HeaderContainer = styled.header`
   }
 `;
 
-const Title = styled.h1`
-  font-size: var(--font-size-h4);
+const Title = styled.h4`
   margin: 0;
   display: flex;
   align-items: center;
   font-weight: normal;
+  background: red;
+  padding: 1rem;
+  font-weight: bold;
 `;
 
 const IconsContainer = styled.div`
@@ -89,6 +92,12 @@ const Middle = styled.div`
   }
 `;
 
+const ProfileImg = styled(Image)`
+  object-fit: cover;
+  border-radius: 50%;
+  overflow: hidden;
+`;
+
 interface HeaderProps {
   toggleCartVisibility: () => void;
   cartItemCount: number;
@@ -109,7 +118,8 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <HeaderContainer>
       <Title>
-        <h4 style={{ background: "var(--danger)", padding: "0.25em" }}>ACME</h4>
+
+       ACME™
       </Title>
       <Middle>
         <Search
@@ -121,7 +131,7 @@ const Header: React.FC<HeaderProps> = ({
       </Middle>
       <IconsContainer>
         <UserIcon>
-          <Image src="/user-icon.png" alt="User" width={40} height={40} />
+          <ProfileImg src="/order.jpeg" alt="User" width={40} height={40} />
         </UserIcon>
         <CartButtonContainer>
           <Cart

@@ -6,12 +6,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 interface CartContainerProps {
-  isVisible: boolean;
+  $isVisible: boolean;
 }
 
 const CartContainer = styled.div.attrs<CartContainerProps>((props) => ({
   style: {
-    display: props.isVisible ? "flex" : "none",
+    display: props.$isVisible ? "flex" : "none",
   },
 }))`
   grid-area: cart;
@@ -29,7 +29,7 @@ const CartContainer = styled.div.attrs<CartContainerProps>((props) => ({
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  
+
   @media (min-width: 992px) {
     position: relative;
     border-left: 1px solid var(--dark);
@@ -131,7 +131,7 @@ const Cart: React.FC<CartProps> = ({
   convertPrice,
 }) => {
   return (
-    <CartContainer isVisible={isVisible}>
+    <CartContainer $isVisible={isVisible}>
       <CartHeader>
         <CartTitle>
           <FontAwesomeIcon icon={faCartShopping} />

@@ -6,12 +6,12 @@ import Header from "../components/Header";
 import Search from "../components/Search";
 import ProductList from "../components/ProductList";
 import Cart from "../components/Cart";
-import Pagination from "../components/Pagination"; // Import Pagination
+import Pagination from "../components/Pagination";
 import { Product, CartItem, Currency } from "../common/types";
 
 const PageContainer = styled.div`
   display: grid;
-  grid-template-rows: fit-content fit-content 200px fit-content;
+  grid-template-rows: fit-content fit-content auto fit-content;
   grid-template-columns: 1fr;
   height: 100dvh;
 
@@ -33,19 +33,18 @@ const PageContainer = styled.div`
 
 const Home = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [currency, setCurrency] = useState("usd"); // Default to 'usd'
+  const [currency, setCurrency] = useState("usd");
   const [filteredItems, setFilteredItems] = useState<Product[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [isCartVisible, setIsCartVisible] = useState(false); // Add state variable for cart visibility
+  const [isCartVisible, setIsCartVisible] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState(1); // Current page state
-  const [itemsPerPage, setItemsPerPage] = useState(9); // Items per page (default)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(9);
 
   const [currencies, setCurrencies] = useState<Currency[]>([]);
   const [totalItems, setTotalItems] = useState(0);
 
   useEffect(() => {
-    // Fetch supported currencies
     const fetchCurrencies = async () => {
       try {
         const response = await axios.get("/api/currencies");
@@ -59,7 +58,6 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    // Fetch items based on search query and pagination
     const fetchItems = async () => {
       try {
         const response = await axios.get("/api/items", {
@@ -71,7 +69,7 @@ const Home = () => {
         });
         setFilteredItems(response.data.items);
         setTotalItems(response.data.total);
-        setItemsPerPage(response.data.perPage); // Dynamically set items per page
+        setItemsPerPage(response.data.perPage);
       } catch (error) {
         console.error("Error fetching items:", error);
       }
@@ -82,7 +80,7 @@ const Home = () => {
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    setCurrentPage(1); // Reset to first page on new search
+    setCurrentPage(1);
   };
 
   const handleAddToCart = (item: Product) => {
@@ -99,7 +97,7 @@ const Home = () => {
 
   const convertPrice = (price: number, currency: string) => {
     const currencyData = currencies.find((c) => c.key === currency);
-    if (!currencyData) return price; // default to the original price if currency data is not found
+    if (!currencyData) return price;
     return price * currencyData.usdCoef;
   };
 

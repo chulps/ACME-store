@@ -1,3 +1,4 @@
+// components/ProductCard.tsx
 import styled, { keyframes } from "styled-components";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,11 +7,6 @@ import { faCartPlus, faCheck } from "@fortawesome/free-solid-svg-icons";
 const Card = styled.div`
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease-out;
-
-  &:hover {
-    transform: scale(1.01);
-  }
 `;
 
 const Image = styled.img`
@@ -79,10 +75,9 @@ const addButtonAnimation = keyframes`
 `;
 
 const Button = styled.button<{ added: boolean }>`
-  margin-top: var(--space-1);
+  margin-top: 1rem;
   width: fit-content;
   align-self: flex-end;
-  padding: 1em;
   justify-self: flex-end;
   background-color: ${({ added }) => (added ? "var(--success)" : "var(--primary)")};
   color: white;
@@ -95,58 +90,61 @@ const Button = styled.button<{ added: boolean }>`
   pointer-events: ${({ added }) => (added ? 'none' : 'auto')}; // Disable pointer events when added
 
   &:hover {
-    background-color: ${({ added }) => (added ? "var(--success)" : "var(--dark)")};
+    background-color: ${({ added }) => (added ? "var(--success-dark)" : "var(--primary-dark)")};
   }
 `;
 
 interface ProductCardProps {
-    title: string;
-    price: number;
-    imageSrc: string;
-    description: string;
-    priceCurrency: string;
-    onAddToCart: () => void;
-    convertPrice: (_price: number, _currency: string) => number;
-    currency: string;
-  }
-  
-  const ProductCard: React.FC<ProductCardProps> = ({
-    title,
-    price,
-    imageSrc,
-    description,
-    onAddToCart,
-    currency
-  }) => {
-    const [added, setAdded] = useState(false);
-  
-    const handleAddToCart = () => {
-      onAddToCart();
-      setAdded(true);
-    };
-  
-    return (
-      <Card>
-        <Image src={imageSrc} alt={title} />
-        <Content>
-          <Title>{title}</Title>
-          <Description>{description}</Description>
-          <BottomRow>
-            <PriceContainer>
-              <label>{currency}</label>
-              <Price>
-              {price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-              </Price>
-            </PriceContainer>
-            <Button added={added} onClick={handleAddToCart}>
-              <FontAwesomeIcon icon={added ? faCheck : faCartPlus} />
-              &nbsp;{added ? "Added to cart" : "Add to cart"}
-            </Button>
-          </BottomRow>
-        </Content>
-      </Card>
-    );
+  title: string;
+  price: number;
+  imageSrc: string;
+  description: string;
+  priceCurrency: string;
+  onAddToCart: () => void;
+  convertPrice: (_price: number, _currency: string) => number;
+  currency: string;
+}
+
+const ProductCard: React.FC<ProductCardProps> = ({
+  title,
+  price,
+  imageSrc,
+  description,
+  onAddToCart,
+  convertPrice,
+  currency,
+}) => {
+  const [added, setAdded] = useState(false);
+
+  const handleAddToCart = () => {
+    onAddToCart();
+    setAdded(true);
   };
-  
-  export default ProductCard;
-  
+
+  const convertedPrice = convertPrice(price, currency);
+
+  return (
+    <Card>
+      <Image src={imageSrc} alt={title} />
+      <Content>
+        <Title>{title}</Title>
+        <Description>{description}</Description>
+        <BottomRow>
+          <PriceContainer>
+            <label>{currency.toUpperCase()}</label>
+            <Price>
+              {convertedPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+            </Price>
+          </PriceContainer>
+          <Button added={added} onClick={handleAddToCart}>
+            <FontAwesomeIcon icon={added ? faCheck : faCartPlus} />
+            &nbsp;{added ? "Added to cart" : "Add to cart"}
+          </Button>
+        </BottomRow>
+      </Content>
+    </Card>
+  );
+};
+
+export default ProductCard;
+

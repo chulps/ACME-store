@@ -1,4 +1,3 @@
-// components/ProductList.tsx
 import styled from "styled-components";
 import ProductCard from "./ProductCard";
 import { Product } from "../common/types";
@@ -24,33 +23,37 @@ const ListGrid = styled.div`
 `;
 
 interface ProductListProps {
-    products: Product[];
-    onAddToCart: (_product: Product) => void;
-    convertPrice: (_price: number, _currency: string) => number; // Add convertPrice prop
-    currency: string; // Add currency prop
-  }
+  products: Product[];
+  onAddToCart: (_product: Product) => void;
+  convertPrice: (_price: number, _currency: string) => number;
+  currency: string;
+}
 
-  const ProductList: React.FC<ProductListProps> = ({ products, onAddToCart, convertPrice, currency }) => {
-    return (
-      <ProductListMain>
-        <ListGrid>
-          {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              title={product.title}
-              priceCurrency={product.priceCurrency}
-              price={product.price}
-              imageSrc={product.imageSrc}
-              description={product.description}
-              onAddToCart={() => onAddToCart(product)}
-              convertPrice={convertPrice} // Pass convertPrice prop
-              currency={currency} // Pass currency prop
-            />
-          ))}
-        </ListGrid>
-      </ProductListMain>
-    );
-  };
-  
-  export default ProductList;
-  
+const ProductList: React.FC<ProductListProps> = ({
+  products,
+  onAddToCart,
+  convertPrice,
+  currency,
+}) => {
+  return (
+    <ProductListMain>
+      <ListGrid>
+        {products.map((product) => (
+          <ProductCard
+            key={product.id}
+            title={product.title}
+            priceCurrency={product.priceCurrency}
+            price={product.price}
+            imageSrc={product.imageSrc}
+            description={product.description}
+            onAddToCart={() => onAddToCart(product)}
+            convertPrice={convertPrice}
+            currency={currency}
+          />
+        ))}
+      </ListGrid>
+    </ProductListMain>
+  );
+};
+
+export default ProductList;
