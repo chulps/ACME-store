@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# ACME-store
-Autify coding challenge
-=======
 # Autify Front-end Assignment
 
 Thank you for participating in Autify's front-end technical assignment. Please read the introductions carefully, and let us know if you have any questions. If you bump into any issues during the assignment, feel free to reach us out.
@@ -133,4 +129,3 @@ Here are the endpoints _(note: click [here](https://apidocjs.com) for api-docs f
 ```
 
 ![Order](./public/gl.jpeg)
->>>>>>> 3a33e60 (initial commit)

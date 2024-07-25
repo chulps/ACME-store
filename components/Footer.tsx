@@ -9,8 +9,7 @@ const FooterContainer = styled.footer`
   justify-content: space-between;
   padding: 1em;
   border-top: 1px solid var(--dark);
-    grid-area: footer;
-
+  grid-area: footer;
 
   @media (min-width: 992px) {
     display: flex;

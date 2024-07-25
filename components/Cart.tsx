@@ -14,8 +14,8 @@ const CartContainer = styled.div.attrs<CartContainerProps>((props) => ({
     display: props.isVisible ? "flex" : "none",
   },
 }))`
-    grid-area: cart;
-  padding: 2rem 0;
+  grid-area: cart;
+  padding: var(--space-2) 0;
   width: 100vw;
   width: 100dvw;
   height: 100vh;
@@ -35,7 +35,7 @@ const CartContainer = styled.div.attrs<CartContainerProps>((props) => ({
     border-left: 1px solid var(--dark);
     flex-grow: 1;
     height: 100%;
-    width: calc(var(--space-6) + var(--space-5));
+    width: calc(var(--space-6) + var(--space-4));
   }
 `;
 
@@ -113,7 +113,8 @@ interface CartProps {
   totalPrice: number;
   isVisible: boolean;
   onClose: () => void;
-  currentCurrency: string; // Add currentCurrency prop
+  currentCurrency: string;
+  convertPrice: (_price: number, _currency: string) => number;
 }
 
 const Cart: React.FC<CartProps> = ({
@@ -122,7 +123,8 @@ const Cart: React.FC<CartProps> = ({
   totalPrice,
   isVisible,
   onClose,
-  currentCurrency, // Add currentCurrency prop
+  currentCurrency,
+  convertPrice,
 }) => {
   return (
     <CartContainer isVisible={isVisible}>
@@ -139,7 +141,7 @@ const Cart: React.FC<CartProps> = ({
       {items.length > 0 ? (
         <CartItemList>
           {items.map((item) => (
-            <CartItem key={item.id} item={item} onRemove={onRemove} />
+            <CartItem key={item.id} item={item} onRemove={onRemove} convertPrice={convertPrice} currency={currentCurrency} />
           ))}
         </CartItemList>
       ) : (
@@ -156,9 +158,9 @@ const Cart: React.FC<CartProps> = ({
       <TotalPriceContainer>
         <TotalPriceLeftContent>
           <label>Total ({currentCurrency.toUpperCase()}):</label>
-          <TotalPrice>{totalPrice}</TotalPrice>
+          <TotalPrice>{totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</TotalPrice>
         </TotalPriceLeftContent>
-        <CheckoutButton>Checkout</CheckoutButton>
+        <CheckoutButton disabled={items.length === 0}>Checkout</CheckoutButton>
       </TotalPriceContainer>
     </CartContainer>
   );

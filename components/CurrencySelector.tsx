@@ -20,16 +20,16 @@ const DropdownButton = styled.button`
   cursor: pointer;
   gap: 0;
   align-items: flex-end;
-    z-index: 2;
+  z-index: 2;
 
-    &:hover {
-        background: var(--background-color);
-      filter: brightness(1.2);
-    }
+  &:hover {
+    background: var(--background-color);
+    filter: brightness(1.2);
+  }
 
-    @media (min-width: 992px) {
-        align-items: flex-start;
-    }
+  @media (min-width: 992px) {
+    align-items: flex-start;
+  }
 `;
 
 const DropdownMenu = styled.ul`
@@ -62,10 +62,10 @@ const ChevronIcon = styled(FontAwesomeIcon)`
 `;
 
 const Text = styled.p`
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    line-height: 1;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  line-height: 1;
 `;
 
 export interface CurrencySelectorProps {

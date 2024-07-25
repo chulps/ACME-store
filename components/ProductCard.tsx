@@ -74,9 +74,10 @@ const addButtonAnimation = keyframes`
 `;
 
 const Button = styled.button<{ added: boolean }>`
-  margin-top: 1rem;
+  margin-top: var(--space-1);
   width: fit-content;
   align-self: flex-end;
+  padding: 1em;
   justify-self: flex-end;
   background-color: ${({ added }) => (added ? "var(--success)" : "var(--primary)")};
   color: white;
@@ -94,52 +95,53 @@ const Button = styled.button<{ added: boolean }>`
 `;
 
 interface ProductCardProps {
-  title: string;
-  price: number;
-  imageSrc: string;
-  description: string;
-  priceCurrency: string;
-  onAddToCart: () => void;
-}
-
-const ProductCard: React.FC<ProductCardProps> = ({
-  title,
-  price,
-  imageSrc,
-  description,
-  priceCurrency,
-  onAddToCart,
-}) => {
-  const [added, setAdded] = useState(false);
-
-  const handleAddToCart = () => {
-    onAddToCart();
-    setAdded(true);
+    title: string;
+    price: number;
+    imageSrc: string;
+    description: string;
+    priceCurrency: string;
+    onAddToCart: () => void;
+    convertPrice: (_price: number, _currency: string) => number;
+    currency: string;
+  }
+  
+  const ProductCard: React.FC<ProductCardProps> = ({
+    title,
+    price,
+    imageSrc,
+    description,
+    onAddToCart,
+    currency
+  }) => {
+    const [added, setAdded] = useState(false);
+  
+    const handleAddToCart = () => {
+      onAddToCart();
+      setAdded(true);
+    };
+  
+    return (
+      <Card>
+        <Image src={imageSrc} alt={title} />
+        <Content>
+          <Title>{title}</Title>
+          <Description>{description}</Description>
+          <BottomRow>
+            <PriceContainer>
+              <label>{currency}</label>
+              <Price>
+              {price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </Price>
+            </PriceContainer>
+            <Button added={added} onClick={handleAddToCart}>
+              <FontAwesomeIcon icon={added ? faCheck : faCartPlus} />
+              &nbsp;{added ? "Added to cart" : "Add to cart"}
+            </Button>
+          </BottomRow>
+        </Content>
+      </Card>
+    );
   };
-
-  return (
-    <Card>
-      <Image src={imageSrc} alt={title} />
-      <Content>
-        <Title>{title}</Title>
-        <Description>{description}</Description>
-        <BottomRow>
-          <PriceContainer>
-            <label>{priceCurrency}</label>
-            <Price>
-              {(Math.round(price * 100) / 100)
-                .toFixed(2)
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-            </Price>
-          </PriceContainer>
-          <Button added={added} onClick={handleAddToCart}>
-            <FontAwesomeIcon icon={added ? faCheck : faCartPlus} />
-            &nbsp;{added ? "Added to cart" : "Add to cart"}
-          </Button>
-        </BottomRow>
-      </Content>
-    </Card>
-  );
-};
-
-export default ProductCard;
+  
+  export default ProductCard;
+  

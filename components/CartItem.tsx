@@ -62,9 +62,11 @@ const ItemDescription = styled.small`
 interface CartItemProps {
   item: CartItemType;
   onRemove: (_id: string) => void;
+  convertPrice: (_price: number, _currency: string) => number; // Add convertPrice prop
+  currency: string; // Add currency prop
 }
 
-const CartItem: React.FC<CartItemProps> = ({ item, onRemove }) => {
+const CartItem: React.FC<CartItemProps> = ({ item, onRemove, convertPrice, currency }) => {
   return (
     <ItemContainer>
       <ItemImage src={item.imageSrc} alt={item.title} />
@@ -79,8 +81,8 @@ const CartItem: React.FC<CartItemProps> = ({ item, onRemove }) => {
           <ItemDescription>{item.description}</ItemDescription>
         </div>
         <ItemPrice>
-          <label>{item.priceCurrency}</label>
-          {item.price}
+          <label>{currency}</label>
+          {convertPrice(item.price, currency).toFixed(2)}
         </ItemPrice>
       </ItemDetails>
     </ItemContainer>

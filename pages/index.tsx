@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import styled from "styled-components";
+import axios from "axios";
 import Header from "../components/Header";
 import Search from "../components/Search";
 import ProductList from "../components/ProductList";
 import Cart from "../components/Cart";
 import Pagination from "../components/Pagination"; // Import Pagination
-import { currencies, items as initialItems } from "../common/data";
-import { Product, CartItem } from "../common/types";
+import { Product, CartItem, Currency } from "../common/types";
 
 const PageContainer = styled.div`
   display: grid;
@@ -35,23 +35,54 @@ const PageContainer = styled.div`
 const Home = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [currency, setCurrency] = useState("usd"); // Default to 'usd'
-  const [filteredItems, setFilteredItems] = useState<Product[]>(initialItems);
+  const [filteredItems, setFilteredItems] = useState<Product[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isCartVisible, setIsCartVisible] = useState(false); // Add state variable for cart visibility
 
   const [currentPage, setCurrentPage] = useState(1); // Current page state
   const itemsPerPage = 15; // Items per page
 
+  const [currencies, setCurrencies] = useState<Currency[]>([]);
+  const [totalItems, setTotalItems] = useState(0);
+
   useEffect(() => {
-    const filtered = initialItems.filter((item) =>
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFilteredItems(filtered);
-  }, [searchQuery]);
+    // Fetch supported currencies
+    const fetchCurrencies = async () => {
+      try {
+        const response = await axios.get("/api/currencies");
+        setCurrencies(response.data);
+      } catch (error) {
+        console.error("Error fetching currencies:", error);
+      }
+    };
+
+    fetchCurrencies();
+  }, []);
+
+  useEffect(() => {
+    // Fetch items based on search query and pagination
+    const fetchItems = async () => {
+      try {
+        const response = await axios.get("/api/items", {
+          params: {
+            limit: itemsPerPage,
+            offset: (currentPage - 1) * itemsPerPage,
+            query: searchQuery,
+          },
+        });
+        setFilteredItems(response.data.items);
+        setTotalItems(response.data.total);
+      } catch (error) {
+        console.error("Error fetching items:", error);
+      }
+    };
+
+    fetchItems();
+  }, [searchQuery, currentPage, itemsPerPage]);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
+    setCurrentPage(1); // Reset to first page on new search
   };
 
   const handleAddToCart = (item: Product) => {
@@ -81,12 +112,7 @@ const Home = () => {
     setIsCartVisible(!isCartVisible);
   };
 
-  // Calculate items for the current page
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentItems = filteredItems.slice(startIndex, endIndex);
-
-  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -104,7 +130,12 @@ const Home = () => {
         onCurrencyChange={handleCurrencyChange}
         currentCurrency={currency}
       />
-      <ProductList products={currentItems} onAddToCart={handleAddToCart} />
+      <ProductList
+        products={filteredItems}
+        onAddToCart={handleAddToCart}
+        convertPrice={convertPrice}
+        currency={currency}
+      />
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
@@ -116,7 +147,8 @@ const Home = () => {
         totalPrice={totalPrice}
         isVisible={isCartVisible}
         onClose={toggleCartVisibility}
-        currentCurrency={currency} // Pass currentCurrency prop
+        currentCurrency={currency}
+        convertPrice={convertPrice}
       />
     </PageContainer>
   );
