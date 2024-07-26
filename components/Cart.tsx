@@ -2,7 +2,13 @@ import styled, { keyframes } from "styled-components";
 import CartItem from "./CartItem";
 import { CartItem as CartItemType } from "../common/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faDollarSign, faEuroSign, faYenSign, faPoundSign } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTimes,
+  faDollarSign,
+  faEuroSign,
+  faYenSign,
+  faPoundSign,
+} from "@fortawesome/free-solid-svg-icons";
 import { faCanadianMapleLeaf } from "@fortawesome/free-brands-svg-icons";
 import { useState } from "react";
 
@@ -14,7 +20,8 @@ interface CartTitleProps {
   $items: CartItemType[];
 }
 
-const widthIn = keyframes`
+// Animations
+const widthIn = keyframes` // Animation for when the cart is opened on desktop
   from {
     width: 0;
     opacity: 0;
@@ -25,7 +32,7 @@ const widthIn = keyframes`
   }
 `;
 
-const widthOut = keyframes`
+const widthOut = keyframes` // Animation for when the cart is closed on desktop
   from {
     width: calc(var(--space-6) + var(--space-4));
     opacity: 1;
@@ -36,7 +43,7 @@ const widthOut = keyframes`
   }
 `;
 
-const slideIn = keyframes`
+const slideIn = keyframes` // Animation for when the cart is opened on mobile
   from {
     transform: translateX(100%);
     opacity: 0;
@@ -47,7 +54,7 @@ const slideIn = keyframes`
   }
 `;
 
-const slideOut = keyframes`
+const slideOut = keyframes` // Animation for when the cart is closed on mobile
   from {
     transform: translateX(0);
     opacity: 1;
@@ -57,12 +64,11 @@ const slideOut = keyframes`
     opacity: 0;
   }
 `;
-
 
 const CartContainer = styled.div<CartContainerProps>`
   grid-area: cart;
   padding: var(--space-2) 0;
-  height: 100vh;
+  height: 100vh; // fallback in case browser doesn't support dvh
   height: 100dvh;
   position: fixed;
   flex-direction: column;
@@ -74,27 +80,34 @@ const CartContainer = styled.div<CartContainerProps>`
   flex-direction: column;
   justify-content: space-between;
   transform-origin: left;
-  width: ${({ $isVisible }) => ($isVisible ? 'calc(var(--space-6) + var(--space-4))' : '0')};
-  opacity: ${({ $isVisible }) => ($isVisible ? '1' : '0')};
+  width: ${({ $isVisible }) =>
+    $isVisible
+      ? "calc(var(--space-6) + var(--space-4))"
+      : "0"}; // Adjust the width based on the $isVisible prop
+  opacity: ${({ $isVisible }) =>
+    $isVisible ? "1" : "0"}; // Adjust the opacity based on the $isVisible prop
   transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
 
   @media (max-width: 991px) {
-    width: 100vw;
+    width: 100vw; // fallback in case browser doesn't support dvw
     width: 100dvw;
-    animation: ${({ $isVisible }) => ($isVisible ? slideIn : slideOut)} 0.3s forwards;
+    animation: ${({ $isVisible }) => ($isVisible ? slideIn : slideOut)} 0.3s
+      forwards; // Animate the cart on mobile
   }
 
   @media (min-width: 992px) {
     position: relative;
     border-left: 1px solid var(--dark);
     flex-grow: 1;
-    animation: ${({ $isVisible }) => ($isVisible ? widthIn : widthOut)} 0.3s forwards;
+    animation: ${({ $isVisible }) => ($isVisible ? widthIn : widthOut)} 0.3s
+      forwards; // Animate the cart on desktop
   }
 `;
 
 const CartTitle = styled.data<CartTitleProps>`
   margin-top: 0;
-  color: ${({ $items }) => ($items.length > 0 ? "var(--success)" : "var(--white)")};
+  color: ${({ $items }) =>
+    $items.length > 0 ? "var(--success)" : "var(--white)"};
 `;
 
 const CartHeader = styled.div`
@@ -103,7 +116,6 @@ const CartHeader = styled.div`
   align-items: center;
   border-bottom: 1px solid var(--secondary);
   padding: var(--space-1) 0 var(--space-2) var(--space-2);
-
   margin: 0 var(--space-2);
 `;
 
@@ -140,7 +152,7 @@ const CartItemList = styled.ul<{ $isVisible: boolean }>`
   flex: 1 0 auto;
   overflow-y: auto;
   height: calc(100dvh - 300px);
-  opacity: ${({ $isVisible }) => ($isVisible ? '1' : '0')};
+  opacity: ${({ $isVisible }) => ($isVisible ? "1" : "0")};
   transition: opacity 0.3s ease-in-out;
 `;
 
@@ -168,6 +180,10 @@ const CheckoutButton = styled.button`
     background: var(--neutral-300);
     cursor: not-allowed;
   }
+
+  &:hover {
+    background: var(--success-400);
+  }
 `;
 
 const TotalPriceLeftContent = styled.span`
@@ -180,6 +196,10 @@ const OKButton = styled.button`
   width: 100%;
   background: var(--success);
   margin-top: var(--space-1);
+
+  &:hover {
+    background: var(--success-400);
+  }
 `;
 
 const SuccessState = styled.div`
@@ -238,7 +258,7 @@ const Cart: React.FC<CartProps> = ({
 
   const handleCheckout = () => {
     const order = {
-      items: items.map(item => ({
+      items: items.map((item) => ({
         id: item.id,
         title: item.title,
         price: convertPrice(item.price, currentCurrency).toFixed(2),
@@ -247,12 +267,13 @@ const Cart: React.FC<CartProps> = ({
       totalPrice: totalPrice.toFixed(2),
       currency: currentCurrency,
     };
-    console.log("Order:", JSON.stringify(order, null, 2));
+    console.log("Order:", JSON.stringify(order, null, 2)); // log the order to the console on checkout
     onCheckout();
     setShowConfirmation(true);
     setIsCheckedOut(true);
   };
 
+  // resets the cart after checkout
   const handleOkClick = () => {
     setShowConfirmation(false);
     setIsCheckedOut(false);
@@ -262,7 +283,7 @@ const Cart: React.FC<CartProps> = ({
     <CartContainer $isVisible={isVisible}>
       <CartHeader>
         <CartTitle $items={items}>
-            <label>shopping cart</label>
+          <label>shopping cart</label>
           {items.length} Item{items.length === 1 ? "" : "s"}
         </CartTitle>
 
@@ -297,20 +318,19 @@ const Cart: React.FC<CartProps> = ({
           <EmptyStateMessage>
             Your Shopping Cart lives to serve. You can freely place and remove
             items, move them to Buy Later, or add them to your Wish List.
-            Continue shopping on ACME.co.jp homepage, learn about
-            today&apos;s deals, or visit your Wish List.
+            Continue shopping on ACME.co.jp homepage, learn about today&apos;s
+            deals, or visit your Wish List.
           </EmptyStateMessage>
         </EmptyState>
       )}
       <TotalPriceContainer>
         <TotalPriceLeftContent>
-          <label>
-            Total (
-            {currentCurrency.toUpperCase()}):
-          </label>
+          <label>Total ({currentCurrency.toUpperCase()}):</label>
           <TotalPrice>
             <FontAwesomeIcon
-              icon={currencyIcons[currentCurrency as keyof typeof currencyIcons]}
+              icon={
+                currencyIcons[currentCurrency as keyof typeof currencyIcons]
+              }
             />
             {totalPrice.toLocaleString("en-US", {
               minimumFractionDigits: 2,

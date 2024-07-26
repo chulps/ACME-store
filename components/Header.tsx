@@ -5,6 +5,7 @@ import Search from "./Search";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { Currency } from "../common/types";
+import FlickeringText from "./FlickeringText"; // Import the new component
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -122,12 +123,10 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   return (
     <HeaderContainer>
-      
       <span style={{display: "flex", color: "var(--danger)"}}>
         <Title>
-         ACME
+          <FlickeringText />
         </Title>
-        &nbsp;™
       </span>
       <Middle>
         <Search

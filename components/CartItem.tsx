@@ -84,7 +84,10 @@ const CartItem: React.FC<CartItemProps> = ({ item, onRemove, convertPrice, curre
   return (
     <ItemContainer>
       <ItemImage src={item.imageSrc} alt={item.title} />
+
+
       <ItemDetails>
+        
         <div>
           <ItemTitle>
             {item.title}
@@ -94,12 +97,15 @@ const CartItem: React.FC<CartItemProps> = ({ item, onRemove, convertPrice, curre
           </ItemTitle>
           <ItemDescription>{item.description}</ItemDescription>
         </div>
+
         <ItemPrice>
           <label>
             {currency.toUpperCase()}
           </label>
-          <FontAwesomeIcon icon={currencyIcons[currency as keyof typeof currencyIcons]} />{convertPrice(item.price, currency).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          <FontAwesomeIcon icon={currencyIcons[currency as keyof typeof currencyIcons]} />
+          &nbsp;{convertPrice(item.price, currency).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
         </ItemPrice>
+
       </ItemDetails>
     </ItemContainer>
   );

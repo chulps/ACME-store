@@ -77,21 +77,27 @@ interface SearchProps {
   currentCurrency: string;
 }
 
+// Define the Search component with the specified props
 const Search: React.FC<SearchProps> = ({
   onSearch,
   currencies,
   onCurrencyChange,
   currentCurrency,
 }) => {
+  // Define a state variable for the search query
   const [query, setQuery] = useState("");
 
+  // Debounced search function to avoid triggering search on every keystroke
   const debouncedSearch = useCallback(
     (query) => {
+      
+      // Set a timeout to delay the search function
       const handler = setTimeout(() => {
         console.log("Search query from useEffect:", query);
         onSearch(query);
       }, 1000);
 
+      // Clear the timeout if the component is unmounted or the query changes before the timeout completes
       return () => {
         clearTimeout(handler);
       };
@@ -99,11 +105,13 @@ const Search: React.FC<SearchProps> = ({
     [onSearch]
   );
 
+  // Trigger the debounced search function whenever the query changes
   useEffect(() => {
     console.log("Search useEffect triggered with query:", query);
     return debouncedSearch(query);
   }, [query, debouncedSearch]);
 
+  // Update the query state when the input value changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };

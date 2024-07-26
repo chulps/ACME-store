@@ -1,131 +1,211 @@
-# Autify Front-end Assignment
+# ACME Store
 
-Thank you for participating in Autify's front-end technical assignment. Please read the introductions carefully, and let us know if you have any questions. If you bump into any issues during the assignment, feel free to reach us out.
+This is a front-end technical assignment for Autify, implementing an online store with the following features:
+- View products
+- Paginate / search for products
+- Add products to cart
+- Remove products from cart
+- See a list of products in cart
+- See the total price of the items in cart
+- Change the currency
+- Check out
 
-## Instruction
+## Tech Stack
 
-When you finish the assignment
+- **React**
+- **TypeScript**
+- **Next.js**
+- **Styled-components**
+- **FontAwesome**
 
-1. Create a private repository in your own GitHub account
-2. Push this project to that repository
-3. Invite @FujiHaruka and @ykhs as collaborators
+## Getting Started
 
-## Tips
+### Prerequisites
 
-1. Decide on your front-end stack. You are free to use the modern front-end technologies of your choice for things like styling, testing, linting etc. You are also free to utilize any tool, library, UI toolkit etc. that you normally use in your projects. It's an empty canvas, and you're the artist! We only ask you to make sure to use **React** and **Typescript**.
+- Node.js
+- Yarn (recommended)
 
-2. You will work on the provided [Next.js](https://nextjs.org/docs/getting-started) application. While you don't need to know much about Next.js to complete this assignment, we encourage you to check out the basics. You might find using some Next.js features (such as SSR) in your assignment to be useful and time saving.
+### Installation
 
-3. We care about your code being linted, clean, readable, maintainable, well-tested, and well-documented as much as we care about the end result. We'd like to know your reasoning behind your design and code. Documentation would help us not to misunderstand and overlooking your intentions. You are free to chose the technologies you enforce these things with, but please make sure to do so.
+1. Clone the repository:
 
-4. Please make sure that your build works, and we can run your code. If the build breaks due to minor issues like linting, **we will** try our best to get around it and somehow run your code to evaluate it. However keep in mind that this might effect your overall score.
-
-# Acme Store
-
-Acme Corporation decided to create an online store after receiving so many complaints from frustrated customers having trouble with ordering and shipping, and they need your help!
-
-![Order](./public/order.jpeg)
-
-## Challenges
-
-- You are asked to create the main screen for their online store with the following features:
-
-  - View products
-  - Paginate / search for products
-  - Add products to cart
-  - Remove products from cart
-  - See a list of products in cart
-  - See the total price of the items in cart
-  - Change the currency
-  - Check out
-
-- You are provided with the wireframe below. Acme Corp's designers wanted you to know that it's important to them that you stay true to the wireframe they've created. They asked you to study the wireframe carefully, and follow the exact layout they've created. However, they left the look-and-feel of the product completely to you, so don't hesitate to get creative!
-
-![Wireframe](./public/wireframe.png)
-
-- You're told to support multiple currencies. There should be a global currency selector that defaults to USD, and is populated with the supported currency data provided by the API. Selecting a currency should change all currency values on the screen.
-
-- Items in the grid should feature product image, title, description, price (in selected currency), and an "Add" button that adds the item to the cart.
-
-- Each item in the cart should be displayed in the cart view. They should feature product image, title, description, price, and a button that removes the item from the card. Down below, the total price of the items in the cart should be displayed in selected currency.
-
-- Search input should filter the items, and pagination component should control the pagination.
-
-- You are given an API to pull data from, and told not to worry about POST'ing anything. You are free to utilize the API any way you want. However, you're asked **not to** alter anything in the `pages/api` and `common/` directories. You're also asked **not to import** data from `common/data.ts` in the front-end, and consume data through the API.
-
-Here are the endpoints _(note: click [here](https://apidocjs.com) for api-docs format docs)_:
-
-```typescript
-/**
- * GET /api/currencies
- *
- * @api {get} /api/currencies Request supported currencies
- * @apiSuccess {ApiCurrenciesResponse}  response List of supported currencies
- * @apiSuccess {CurrencyKey}            response.key Currency code
- * @apiSuccess {string}                 response.symbol Currency symbol
- * @apiSuccess {number}                 response.usdCoef
- *   This value can be used to convert a convercy to and from USD.
- *   price_in_currency = price_in_usd * currency_usdCoef
- * @apiSuccessExample {json} Success-Response:
- *     HTTP/1.1 200 OK
- *     [
- *       { key: "usd", symbol: "$", usdCoef: 1 },
- *       { key: "eur", symbol: "€", usdCoef: 0.87534666 },
- *       { key: "gbp", symbol: "£", usdCoef: 0.7386999 },
- *       { key: "cad", symbol: "$", usdCoef: 1.2671499 },
- *       { key: "jpy", symbol: "¥", usdCoef: 115.52954 }
- *     ]
- *
- *
- *
- * GET /api/items
- *
- * @api {get} /api/items Request items
- * @apiParam {ApiItemsRequest}      params
- * @apiParam {number}               params[limit]=10
- * @apiParam {number}               params[offset]=0
- * @apiParam {string}               [params[query]]
- * @apiSuccess {ApiItemsResponse}   response
- * @apiSuccess {number}             response[total]
- * @apiSuccess {number}             response[perPage]
- * @apiSuccess {Item[]}             response[items]
- * @apiSuccess {uuid}               response[items[id]]
- * @apiSuccess {string}             response[items[title]]
- * @apiSuccess {string}             response[items[description]]
- * @apiSuccess {string}             response[items[imageSrc]]
- * @apiSuccess {number}             response[items[price]]
- * @apiSuccess {CurrencyKey}        response[items[priceCurrency]]
- * @apiSuccess {date}               response[items[createdAt]]
- * @apiSuccess {date}               response[items[updatedAt]]
- * @apiSuccessExample {json} Success-Response:
- *     HTTP/1.1 200 OK
- *     {
- *       "total": 2,
- *       "perPage": 10,
- *       "items": [
- *          {
- *            "id": "0ba77542-6821-4124-b014-60a892309a8e",
- *            "title": "Explosive tennis balls",
- *            "description": "Tickle your friends! Surprise your opponent!",
- *            "imageSrc": "https://..."
- *            "price": 4.99,
- *            "priceCurrency": "usd",
- *            "createdAt": "2022-01-10T10:39:39.607Z",
- *            "updatedAt": "2020-02-28T09:06:27.298Z",
- *          },
- *          {
- *            "id": "98024716-6ca5-49ac-bbd6-a733a47f97a9",
- *            "title": "Dehydrated Boulders",
- *            "description": "Just add water",
- *            "imageSrc": "https://..."
- *            "price": 7.49,
- *            "priceCurrency": "eur",
- *            "createdAt": "2022-01-10T10:39:39.607Z",
- *            "updatedAt": "2020-02-28T09:06:27.298Z",
- *          }
- *       ]
- *     }
- */
+```bash
+git clone https://github.com/chulps/ACME-store.git
+cd ACME-store
 ```
 
-![Order](./public/gl.jpeg)
+2. Install dependencies:
+
+```bash
+yarn install
+```
+
+3. Run the development server:
+
+```bash
+yarn dev
+```
+
+4. Open the application in your browser
+[localhost](http://localhost:3000)
+<a href="http://localhost:3000">localhost:3000</a>
+
+
+### Build the project
+1. Run the 'build' command
+
+```bash
+yarn build
+```
+
+2. Start the production server:
+
+```bash
+yarn start
+```
+
+### Linting and Testing
+
+1. To run the linter:
+
+```bash
+yarn lint
+```
+
+2. To run tests:
+
+```bash
+yarn test
+```
+
+## Project Structure
+
+- `components/`: Contains the React components used in the application.
+  - `Cart.tsx`: Component for the shopping cart.
+  - `CartItem.tsx`: Component for individual cart items.
+  - `CurrencySelector.tsx`: Component for selecting currency.
+  - `Footer.tsx`: Component for the footer.
+  - `Header.tsx`: Component for the header.
+  - `Pagination.tsx`: Component for pagination.
+  - `ProductCard.tsx`: Component for individual product cards.
+  - `ProductList.tsx`: Component for listing products.
+  - `Search.tsx`: Component for the search bar.
+- `pages/`: Contains the Next.js pages.
+  - `index.tsx`: Main page component.
+  - `_app.tsx`: Custom App component that came with the starter code.
+  - `_document.tsx`: Custom Document required for styled-components
+- `common/`: Contains shared types and utilities.
+  - `types.ts`: Type definitions for the project.
+  - `data.ts`: Sample data for the project.
+- `public/`: Contains static assets.
+  - `images/`: Directory for image files.
+- `styles/`: Contains global styles.
+  - `globals.css`: Global CSS styles. All other CSS styles are scoped to the components.
+- `api/`: Contains API routes.
+  - `items.ts`: API route for fetching items.
+  - `currencies.ts`: API route for fetching currencies.
+
+
+## Features
+
+### View Products
+- The main screen displays a list of products fetched from the API.
+
+### Search Products
+- Products can be searched for by their title
+
+### Change the Currency
+- A currency selector allows changing the currency displayed for product prices and the total price in the cart.
+
+### Paginate / Search for Products
+- Pagination is implemented to navigate through pages of products.
+- A search bar allows filtering products by their titles.
+
+### Add / Remove Products to/from Cart
+- Each product card has an "Add to Cart" button.
+- Products in the cart can be removed using the "Remove" button.
+
+### View Cart
+- The cart can be hidden or shown by clicking the cart icon in the header
+
+### See a List of Products in Cart
+The cart view shows a list of products added to the cart, along with their details and a total price.
+
+### Check Out
+- Clicking the "Checkout" button shows a success message.
+- The order details are logged to the console.
+
+
+
+## API Endpoints
+
+### GET /api/currencies
+
+#### Request
+Fetches the supported currencies.
+
+#### Response
+- **200 OK**
+  - **Content:** An array of currency objects.
+  
+#### Example Response
+```json
+[
+  { "key": "usd", "symbol": "$", "usdCoef": 1 },
+  { "key": "eur", "symbol": "€", "usdCoef": 0.87534666 },
+  { "key": "gbp", "symbol": "£", "usdCoef": 0.7386999 },
+  { "key": "cad", "symbol": "$", "usdCoef": 1.2671499 },
+  { "key": "jpy", "symbol": "¥", "usdCoef": 115.52954 }
+]
+```
+
+### GET /api/items
+- Request: Fetches a list of items.
+
+#### Parameters
+- limit (number, optional, default: 10): The number of items to return.
+- offset (number, optional, default: 0): The number of items to skip before starting to collect the result set.
+- query (string, optional): A search query to filter items by title.
+
+#### Response
+- 200 OK
+  - Content: An object containing total number of items, items per page, and an array of item objects.
+  - Example Response:
+```json
+  {
+  "total": 2,
+  "perPage": 10,
+  "items": [
+    {
+      "id": "0ba77542-6821-4124-b014-60a892309a8e",
+      "title": "Explosive tennis balls",
+      "description": "Tickle your friends! Surprise your opponent!",
+      "imageSrc": "https://...",
+      "price": 4.99,
+      "priceCurrency": "usd",
+      "createdAt": "2022-01-10T10:39:39.607Z",
+      "updatedAt": "2020-02-28T09:06:27.298Z"
+    },
+    {
+      "id": "98024716-6ca5-49ac-bbd6-a733a47f97a9",
+      "title": "Dehydrated Boulders",
+      "description": "Just add water",
+      "imageSrc": "https://...",
+      "price": 7.49,
+      "priceCurrency": "eur",
+      "createdAt": "2022-01-10T10:39:39.607Z",
+      "updatedAt": "2020-02-28T09:06:27.298Z"
+    }
+  ]
+}
+```
+
+## Author
+Charles (Chuck) Howard
+
+### Contact
+- Email: chuckoward@gmail.com
+- LinkedIn: Charles Howard
+- Portfolio: www.chuck-howard.com
+- License
+- This project is licensed under the MIT License - see the LICENSE file for details.

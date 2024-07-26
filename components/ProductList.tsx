@@ -2,6 +2,9 @@ import styled from "styled-components";
 import ProductCard from "./ProductCard";
 import { Product, CartItem } from "../common/types";
 
+// This component primarily serves as a layout container for the products
+// Not much logic here
+
 const ProductListMain = styled.main`
   display: flex;
   flex-grow: 1;
@@ -14,7 +17,13 @@ const ProductListMain = styled.main`
 
 const ListGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(calc(var(--space-5) + var(--space-4)), 1fr));
+
+  // This is a bit of a hack to make the grid responsive without using media queries
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(calc(var(--space-5) + var(--space-4)), 1fr)
+  );
+
   gap: var(--space-4);
   height: 100%;
   overflow-y: auto;
@@ -52,7 +61,7 @@ const ProductList: React.FC<ProductListProps> = ({
               imageSrc={product.imageSrc}
               description={product.description}
               onAddToCart={() => onAddToCart(product)}
-              isInCart={isInCart} // Pass isInCart to ProductCard
+              isInCart={isInCart}
               convertPrice={convertPrice}
               currency={currency}
             />

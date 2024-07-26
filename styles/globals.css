@@ -1,3 +1,5 @@
+/* This is starter CSS that I use in all of my portfolio projects. This is the only CSS file in this project, all other styles are scoped within their components. */
+
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto+Serif:opsz@8..144&family=Roboto:wght@400;500;700&display=swap");
 
 :root {
@@ -67,6 +69,7 @@
   font-family: var(--font-family-default);
   line-height: var(--line-height-default);
 
+  /* royal blue color used as the primary color range */
   --royal-950: #00061a;
   --royal-900: #041341;
   --royal-800: #0c2369;
@@ -78,17 +81,7 @@
   --royal-200: #a6bbf8;
   --royal-100: #ccd9ff;
 
-  --electric-950: #001d1f;
-  --electric-900: #0a5f65;
-  --electric-800: #209aa2;
-  --electric-700: #3fc9d3;
-  --electric-600: #60e8f1;
-  --electric-500: #80f9ff;
-  --electric-400: #99f9ff;
-  --electric-300: #b3fbff;
-  --electric-200: #ccfcff;
-  --electric-100: #e6feff;
-
+  /* neutral colors that are slightly blue */
   --black: #000;
   --neutral-950: #1b1d21;
   --neutral-900: #222429;
@@ -103,6 +96,7 @@
   --neutral-050: #f0f1f2;
   --white: #ffffff;
 
+  /* red color used for semantic "danger" */
   --danger-950: #36252A;
   --danger-900: #49262A;
   --danger-800: #70282B;
@@ -114,6 +108,7 @@
   --danger-200: #ffa6a6;
   --danger-100: #ffcccc;
 
+  /* green color used for semantic "success" */
   --success-950: #03140a;
   --success-900: #062814;
   --success-800: #0c5129;
@@ -125,33 +120,9 @@
   --success-200: #9aeabe;
   --success-100: #cbf4dd;
 
-  --warning-950: #1a170a;
-  --warning-900: #4E4B35;
-  --warning-800: #7A7141;
-  --warning-700: #A7984D;
-  --warning-600: #D3BE59;
-  --warning-500: #ffe565;
-  --warning-400: #fff184;
-  --warning-300: #fffaa3;
-  --warning-200: #ffffc1;
-  --warning-100: #fdffe0;
-
-  --info-950: #090217;
-  --info-900: #14072e;
-  --info-800: #2c145b;
-  --info-700: #472689;
-  --info-600: #663eb7;
-  --info-500: #895be4;
-  --info-400: #9f79ea;
-  --info-300: #b699ef;
-  --info-200: #cdbaf4;
-  --info-100: #e6dcfa;
-
   /*  semantic ui colors  */
   --danger: var(--danger-500);
-  --warning: var(--warning-500);
   --success: var(--success-500);
-  --info: var(--info-500);
   --primary: var(--royal-500);
   --secondary: var(--neutral-500);
   --light: var(--neutral-200);
@@ -220,8 +191,6 @@ data,
   padding: 0;
   scroll-behavior: smooth;
 }
-
-
 
 body {
   background: var(--background-color);
