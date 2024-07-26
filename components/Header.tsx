@@ -12,6 +12,7 @@ const HeaderContainer = styled.header`
   align-items: center;
   padding: var(--space-2);
   grid-area: header;
+  margin: 0 var(--space-2);
   
   @media screen and (min-width: 992px) {
     flex-direction: row;
@@ -29,6 +30,8 @@ const Title = styled.h4`
   padding: 1rem;
   font-weight: bold;
   color: var(--white);
+  font-style: italic;
+  text-shadow: 0 0 6px var(--white);
 `;
 
 const IconsContainer = styled.div`

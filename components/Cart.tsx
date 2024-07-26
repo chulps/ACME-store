@@ -1,24 +1,67 @@
-// components/Cart.tsx
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import CartItem from "./CartItem";
 import { CartItem as CartItemType } from "../common/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping, faTimes, faDollarSign, faEuroSign, faYenSign, faPoundSign } from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faDollarSign, faEuroSign, faYenSign, faPoundSign } from "@fortawesome/free-solid-svg-icons";
 import { faCanadianMapleLeaf } from "@fortawesome/free-brands-svg-icons";
+import { useState } from "react";
 
 interface CartContainerProps {
   $isVisible: boolean;
 }
 
-const CartContainer = styled.div.attrs<CartContainerProps>((props) => ({
-  style: {
-    display: props.$isVisible ? "flex" : "none",
-  },
-}))`
+interface CartTitleProps {
+  $items: CartItemType[];
+}
+
+const widthIn = keyframes`
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: calc(var(--space-6) + var(--space-4));
+    opacity: 1;
+  }
+`;
+
+const widthOut = keyframes`
+  from {
+    width: calc(var(--space-6) + var(--space-4));
+    opacity: 1;
+  }
+  to {
+    width: 0;
+    opacity: 0;
+  }
+`;
+
+const slideIn = keyframes`
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
+
+const slideOut = keyframes`
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+`;
+
+
+const CartContainer = styled.div<CartContainerProps>`
   grid-area: cart;
   padding: var(--space-2) 0;
-  width: 100vw;
-  width: 100dvw;
   height: 100vh;
   height: 100dvh;
   position: fixed;
@@ -30,18 +73,28 @@ const CartContainer = styled.div.attrs<CartContainerProps>((props) => ({
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transform-origin: left;
+  width: ${({ $isVisible }) => ($isVisible ? 'calc(var(--space-6) + var(--space-4))' : '0')};
+  opacity: ${({ $isVisible }) => ($isVisible ? '1' : '0')};
+  transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
+
+  @media (max-width: 991px) {
+    width: 100vw;
+    width: 100dvw;
+    animation: ${({ $isVisible }) => ($isVisible ? slideIn : slideOut)} 0.3s forwards;
+  }
 
   @media (min-width: 992px) {
     position: relative;
     border-left: 1px solid var(--dark);
     flex-grow: 1;
-    height: 100%;
-    width: calc(var(--space-6) + var(--space-4));
+    animation: ${({ $isVisible }) => ($isVisible ? widthIn : widthOut)} 0.3s forwards;
   }
 `;
 
-const CartTitle = styled.data`
+const CartTitle = styled.data<CartTitleProps>`
   margin-top: 0;
+  color: ${({ $items }) => ($items.length > 0 ? "var(--success)" : "var(--white)")};
 `;
 
 const CartHeader = styled.div`
@@ -49,13 +102,15 @@ const CartHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--secondary);
-  padding-bottom: var(--space-1);
-  padding-left: var(--space-1);
+  padding: var(--space-1) 0 var(--space-2) var(--space-2);
+
   margin: 0 var(--space-2);
 `;
 
 const EmptyState = styled.div`
-  padding: var(--space-3);
+  max-width: var(--space-6);
+  margin: 0 auto;
+  padding: 0;
 `;
 
 const EmptyStateHeader = styled.h4`
@@ -79,12 +134,14 @@ const CloseButton = styled.button`
   }
 `;
 
-const CartItemList = styled.ul`
+const CartItemList = styled.ul<{ $isVisible: boolean }>`
   list-style: none;
   padding: var(--space-2);
   flex: 1 0 auto;
   overflow-y: auto;
   height: calc(100dvh - 300px);
+  opacity: ${({ $isVisible }) => ($isVisible ? '1' : '0')};
+  transition: opacity 0.3s ease-in-out;
 `;
 
 const TotalPriceContainer = styled.p`
@@ -104,6 +161,13 @@ const TotalPrice = styled.data`
 
 const CheckoutButton = styled.button`
   background: var(--success);
+  color: white;
+  cursor: pointer;
+
+  &:disabled {
+    background: var(--neutral-300);
+    cursor: not-allowed;
+  }
 `;
 
 const TotalPriceLeftContent = styled.span`
@@ -112,15 +176,33 @@ const TotalPriceLeftContent = styled.span`
   text-align: left;
 `;
 
-interface CartProps {
-  items: CartItemType[];
-  onRemove: (_id: string) => void;
-  totalPrice: number;
-  isVisible: boolean;
-  onClose: () => void;
-  currentCurrency: string;
-  convertPrice: (_price: number, _currency: string) => number;
-}
+const OKButton = styled.button`
+  width: 100%;
+  background: var(--success);
+  margin-top: var(--space-1);
+`;
+
+const SuccessState = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-width: var(--space-6);
+  margin: 0 auto;
+`;
+
+const SuccessHeader = styled.h4`
+  color: var(--success);
+  text-align: center;
+`;
+
+const SuccessMessage = styled.p`
+  color: var(--success);
+`;
+
+const SuccessEmoji = styled.h3`
+  color: var(--white);
+  text-align: center;
+  margin-bottom: var(--space-1);
+`;
 
 const currencyIcons = {
   usd: faDollarSign,
@@ -130,31 +212,83 @@ const currencyIcons = {
   cad: faCanadianMapleLeaf,
 };
 
+interface CartProps {
+  items: CartItemType[];
+  onRemove: (_id: string) => void;
+  totalPrice: number;
+  isVisible: boolean;
+  onClose: () => void;
+  onCheckout: () => void;
+  currentCurrency: string;
+  convertPrice: (_price: number, _currency: string) => number;
+}
+
 const Cart: React.FC<CartProps> = ({
   items,
   onRemove,
   totalPrice,
   isVisible,
   onClose,
+  onCheckout,
   currentCurrency,
   convertPrice,
 }) => {
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [isCheckedOut, setIsCheckedOut] = useState(false);
+
+  const handleCheckout = () => {
+    const order = {
+      items: items.map(item => ({
+        id: item.id,
+        title: item.title,
+        price: convertPrice(item.price, currentCurrency).toFixed(2),
+        currency: currentCurrency,
+      })),
+      totalPrice: totalPrice.toFixed(2),
+      currency: currentCurrency,
+    };
+    console.log("Order:", JSON.stringify(order, null, 2));
+    onCheckout();
+    setShowConfirmation(true);
+    setIsCheckedOut(true);
+  };
+
+  const handleOkClick = () => {
+    setShowConfirmation(false);
+    setIsCheckedOut(false);
+  };
+
   return (
     <CartContainer $isVisible={isVisible}>
       <CartHeader>
-        <CartTitle>
-          <FontAwesomeIcon icon={faCartShopping} />
-          &nbsp;{items.length} Item{items.length === 1 ? "" : "s"}
+        <CartTitle $items={items}>
+            <label>shopping cart</label>
+          {items.length} Item{items.length === 1 ? "" : "s"}
         </CartTitle>
 
         <CloseButton onClick={onClose}>
           <FontAwesomeIcon icon={faTimes} size="2x" />
         </CloseButton>
       </CartHeader>
-      {items.length > 0 ? (
-        <CartItemList>
+      {showConfirmation ? (
+        <SuccessState>
+          <SuccessEmoji>٩( ᐛ )و</SuccessEmoji>
+          <SuccessHeader>Success!</SuccessHeader>
+          <SuccessMessage>
+            You have successfully checked out. Thank you for shopping at ACME!
+          </SuccessMessage>
+          <OKButton onClick={handleOkClick}>OK</OKButton>
+        </SuccessState>
+      ) : items.length > 0 ? (
+        <CartItemList $isVisible={isVisible}>
           {items.map((item) => (
-            <CartItem key={item.id} item={item} onRemove={onRemove} convertPrice={convertPrice} currency={currentCurrency} />
+            <CartItem
+              key={item.id}
+              item={item}
+              onRemove={onRemove}
+              convertPrice={convertPrice}
+              currency={currentCurrency}
+            />
           ))}
         </CartItemList>
       ) : (
@@ -163,7 +297,7 @@ const Cart: React.FC<CartProps> = ({
           <EmptyStateMessage>
             Your Shopping Cart lives to serve. You can freely place and remove
             items, move them to Buy Later, or add them to your Wish List.
-            Continue shopping on the Amazon.co.jp homepage, learn about
+            Continue shopping on ACME.co.jp homepage, learn about
             today&apos;s deals, or visit your Wish List.
           </EmptyStateMessage>
         </EmptyState>
@@ -171,11 +305,25 @@ const Cart: React.FC<CartProps> = ({
       <TotalPriceContainer>
         <TotalPriceLeftContent>
           <label>
-            <FontAwesomeIcon icon={currencyIcons[currentCurrency as keyof typeof currencyIcons]} /> {currentCurrency.toUpperCase()}
+            Total (
+            {currentCurrency.toUpperCase()}):
           </label>
-          <TotalPrice>{totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</TotalPrice>
+          <TotalPrice>
+            <FontAwesomeIcon
+              icon={currencyIcons[currentCurrency as keyof typeof currencyIcons]}
+            />
+            {totalPrice.toLocaleString("en-US", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </TotalPrice>
         </TotalPriceLeftContent>
-        <CheckoutButton disabled={items.length === 0}>Checkout</CheckoutButton>
+        <CheckoutButton
+          disabled={items.length === 0 || isCheckedOut}
+          onClick={handleCheckout}
+        >
+          Checkout
+        </CheckoutButton>
       </TotalPriceContainer>
     </CartContainer>
   );

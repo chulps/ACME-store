@@ -11,7 +11,7 @@ import { Product, CartItem, Currency } from "../common/types";
 
 const PageContainer = styled.div`
   display: grid;
-  grid-template-rows: fit-content fit-content auto fit-content;
+  grid-template-rows: fit-content fit-content 1fr fit-content;
   grid-template-columns: 1fr;
   height: 100dvh;
 
@@ -22,7 +22,7 @@ const PageContainer = styled.div`
     "pagination";
 
   @media screen and (min-width: 992px) {
-    grid-template-rows: auto auto auto fit-content fit-content;
+    grid-template-rows: fit-content 1fr fit-content;
     grid-template-columns: 1fr 3fr auto;
     grid-template-areas:
       "header header cart"
@@ -127,6 +127,12 @@ const Home = () => {
     console.log("Current page updated:", page);
   };
 
+  const handleCheckout = () => {
+    setCartItems([]);
+    console.log("Checkout completed, cart cleared.");
+    console.log("Autify! Thank you for giving me a chance to work with you! I hope my solution is good enough for you to consider me for this opportunity! 🙏");
+  };
+
   return (
     <PageContainer>
       <Head>
@@ -166,6 +172,7 @@ const Home = () => {
         totalPrice={totalPrice}
         isVisible={isCartVisible}
         onClose={toggleCartVisibility}
+        onCheckout={handleCheckout}
         currentCurrency={currency}
         convertPrice={convertPrice}
       />

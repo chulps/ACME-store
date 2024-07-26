@@ -1,7 +1,14 @@
 import styled, { keyframes } from "styled-components";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartPlus, faCheck, faDollarSign, faEuroSign, faYenSign, faPoundSign } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCartPlus,
+  faCheck,
+  faDollarSign,
+  faEuroSign,
+  faYenSign,
+  faPoundSign,
+} from "@fortawesome/free-solid-svg-icons";
 import { faCanadianMapleLeaf } from "@fortawesome/free-brands-svg-icons";
 
 const Card = styled.div`
@@ -83,19 +90,24 @@ const Button = styled.button<{ $added: boolean }>`
   width: fit-content;
   align-self: flex-end;
   justify-self: flex-end;
-  background-color: ${({ $added }) => ($added ? "var(--success)" : "var(--primary)")};
+  background-color: ${({ $added }) =>
+    $added ? "var(--success)" : "var(--primary)"};
   color: white;
   border: none;
   cursor: pointer;
   display: flex;
+  font-size: var(--font-size-small);
   align-items: center;
   padding: 1em;
   gap: var(--space-1);
-  animation: ${({ $added }) => $added && addButtonAnimation} 1s ease-in-out forwards;
-  pointer-events: ${({ $added }) => ($added ? 'none' : 'auto')}; // Disable pointer events when added
+  animation: ${({ $added }) => $added && addButtonAnimation} 1s ease-in-out
+    forwards;
+  pointer-events: ${({ $added }) =>
+    $added ? "none" : "auto"}; // Disable pointer events when added
 
   &:hover {
-    background-color: ${({ $added }) => ($added ? "var(--success-dark)" : "var(--royal-400)")};
+    background-color: ${({ $added }) =>
+      $added ? "var(--success-dark)" : "var(--royal-400)"};
   }
 `;
 
@@ -150,16 +162,20 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <Description>{description}</Description>
         <BottomRow>
           <PriceContainer>
-            <label>
-              <FontAwesomeIcon icon={currencyIcons[currency as keyof typeof currencyIcons]} /> {currency.toUpperCase()}
-            </label>
+            <label>{currency.toUpperCase()}</label>
             <Price>
-              {convertedPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              <FontAwesomeIcon
+                icon={currencyIcons[currency as keyof typeof currencyIcons]}
+              />
+              {convertedPrice.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
             </Price>
           </PriceContainer>
           <Button $added={added} onClick={handleAddToCart}>
-            <FontAwesomeIcon icon={added ? faCheck : faCartPlus} />
-             {added ? "Added to cart" : "Add to cart"}
+            <FontAwesomeIcon icon={added ? faCheck : faCartPlus} /> 
+            {added ? "Added to cart" : "Add to cart"}
           </Button>
         </BottomRow>
       </Content>

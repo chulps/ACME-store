@@ -16,7 +16,7 @@ const ItemContainer = styled.li`
 const ItemDetails = styled.div`
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-2);
   width: 100%;
 `;
 
@@ -96,9 +96,9 @@ const CartItem: React.FC<CartItemProps> = ({ item, onRemove, convertPrice, curre
         </div>
         <ItemPrice>
           <label>
-            <FontAwesomeIcon icon={currencyIcons[currency as keyof typeof currencyIcons]} /> {currency.toUpperCase()}
+            {currency.toUpperCase()}
           </label>
-          {convertPrice(item.price, currency).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          <FontAwesomeIcon icon={currencyIcons[currency as keyof typeof currencyIcons]} />{convertPrice(item.price, currency).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
         </ItemPrice>
       </ItemDetails>
     </ItemContainer>
