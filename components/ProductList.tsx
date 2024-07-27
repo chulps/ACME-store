@@ -12,7 +12,10 @@ const ProductListMain = styled.main`
   overflow-y: auto;
   overflow-x: hidden;
   grid-area: productlist;
-  height: 100%;
+  height: calc(100dvh - 89.5px - 89.5px - 75px );
+  
+  @media screen and (min-width: 992px) {
+  }
 `;
 
 const ListGrid = styled.div`
