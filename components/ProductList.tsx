@@ -15,6 +15,7 @@ const ProductListMain = styled.main`
   height: calc(100dvh - 89.5px - 89.5px - 75px );
   
   @media screen and (min-width: 992px) {
+    height: calc(100dvh - 89.5px - 75px );
   }
 `;
 
