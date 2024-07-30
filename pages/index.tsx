@@ -80,13 +80,20 @@ const Home = () => {
           },
         });
         console.log("Items fetched:", response.data.items);
-        setFilteredItems(response.data.items);
+    
+        const itemsWithImages = response.data.items.map((item: any) => ({
+          ...item,
+          imageSrc: `https://picsum.photos/300/200?random=${item.id}`,
+        }));
+    
+        setFilteredItems(itemsWithImages);
         setTotalItems(response.data.total);
         setItemsPerPage(response.data.perPage);
       } catch (error) {
         console.error("Error fetching items:", error);
       }
     };
+    
 
     fetchItems();
   }, [searchQuery, currentPage, itemsPerPage]);
