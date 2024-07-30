@@ -2,8 +2,7 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 
 const isProd = process.env.NODE_ENV === 'production';
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
   reactStrictMode: true,
   assetPrefix: isProd ? '/ACME-store/' : '',
   basePath: isProd ? '/ACME-store' : '',
@@ -25,5 +24,3 @@ const nextConfig = {
     return config;
   },
 };
-
-module.exports = nextConfig;
