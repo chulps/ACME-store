@@ -3,32 +3,29 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - main  # Change this to your default branch if it's not 'main'
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout the code
+      uses: actions/checkout@v2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '16'
 
-      - name: Install dependencies
-        run: yarn install
+    - name: Install dependencies
+      run: yarn install
 
-      - name: Build project
-        run: yarn build
+    - name: Build the project
+      run: yarn build && yarn export
 
-      - name: Export static content
-        run: yarn export
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./out

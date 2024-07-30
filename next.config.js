@@ -1,14 +1,11 @@
 const ESLintPlugin = require('eslint-webpack-plugin');
 
-const isProd = process.env.NODE_ENV === 'production';
-
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
-  assetPrefix: isProd ? '/ACME-store/' : '',
-  basePath: isProd ? '/ACME-store' : '',
-  trailingSlash: true,
+  basePath: "/ACME-store", // Ensure this is the correct base path for your project
   images: {
-    loader: 'imgix',
+    loader: 'akamai',
     path: '',
   },
   webpack: (config, { dev, isServer }) => {
@@ -24,3 +21,5 @@ module.exports = {
     return config;
   },
 };
+
+module.exports = nextConfig;

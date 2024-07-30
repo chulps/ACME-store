@@ -10,18 +10,11 @@ import {
   faPoundSign,
 } from "@fortawesome/free-solid-svg-icons";
 import { faCanadianMapleLeaf } from "@fortawesome/free-brands-svg-icons";
+import Image from 'next/image';
 
 const Card = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-const Image = styled.img`
-  width: 100%;
-  height: auto;
-  background: var(--dark);
-  aspect-ratio: 16/9;
-  border-radius: var(--space-1);
 `;
 
 const Content = styled.div`
@@ -142,6 +135,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   currency,
 }) => {
   const [added, setAdded] = useState(isInCart);
+  const [src, setSrc] = useState(imageSrc);
   const fallbackImage = 'https://via.placeholder.com/150';
 
   useEffect(() => {
@@ -158,9 +152,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <Card>
       <Image 
-        src={imageSrc || fallbackImage} 
+        src={src || fallbackImage} 
         alt={title} 
-        onError={(e) => (e.currentTarget.src = fallbackImage)}
+        width={500}
+        height={281} // Adjust the size according to your layout needs
+        onError={() => setSrc(fallbackImage)}
       />
       <Content>
         <Title>{title}</Title>
