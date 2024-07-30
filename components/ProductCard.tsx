@@ -142,6 +142,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   currency,
 }) => {
   const [added, setAdded] = useState(isInCart);
+  const fallbackImage = 'https://via.placeholder.com/150';
 
   useEffect(() => {
     setAdded(isInCart);
@@ -156,7 +157,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <Card>
-      <Image src={imageSrc} alt={title} />
+      <Image 
+        src={imageSrc || fallbackImage} 
+        alt={title} 
+        onError={(e) => (e.currentTarget.src = fallbackImage)}
+      />
       <Content>
         <Title>{title}</Title>
         <Description>{description}</Description>
@@ -164,9 +169,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <PriceContainer>
             <label>{currency.toUpperCase()}</label>
             <Price>
+              {/* dynamically choose which currency symbol to use */}
               <FontAwesomeIcon
                 icon={currencyIcons[currency as keyof typeof currencyIcons]}
               />
+
+              {/* format the price so it has commas and 2 decimals */}
               {convertedPrice.toLocaleString("en-US", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
