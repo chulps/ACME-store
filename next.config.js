@@ -3,7 +3,8 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  basePath: "/ACME-store", // Ensure this is the correct base path for your project
+  basePath: "/ACME-store",
+  assetPrefix: "/ACME-store/",
   images: {
     loader: 'akamai',
     path: '',
